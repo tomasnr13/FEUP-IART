@@ -16,4 +16,4 @@ def fileParser(filename):
     return board
 
 
-#print(fileParser("level1.txt"))
+print(fileParser("resources/level1.txt"))
