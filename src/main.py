@@ -59,7 +59,7 @@ def game():
     validMove = False
 
     position = (len(board),0)
-    passedpositions = [(0,0)]
+    passedpositions = [position]
 
     ui.drawBoard(board)
 
