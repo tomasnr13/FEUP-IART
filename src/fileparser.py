@@ -9,11 +9,11 @@ def fileParser(filename):
         line = f.readline()
         line = line.split()
         for x in range(size):
-            if line[x] == '0':
-                line[x] = 0
+            if line[x] == '0' or line[x] == '1':
+                line[x] = int(line[x])
         board += [line]
     
     return board
 
 
-#print(fileParser("level1.txt"))
+print(fileParser("resources/level1.txt"))
