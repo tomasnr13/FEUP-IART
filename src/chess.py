@@ -1,7 +1,6 @@
-# 3 de cada dimensão
-
 from abc import ABC, abstractmethod
-import main
+#import main
+#import fileparser
 
 class ChessPiece(ABC):
     @abstractmethod
@@ -9,7 +8,7 @@ class ChessPiece(ABC):
         pass
     
     def currentCaptures(self, board, line, col):
-        return self.possibleCaptures(self, board, line, col, 1)
+        return self.possibleCaptures(board, line, col, 1)
     
     def horizontalCaptures(board, line, col, place):
         positions = []
@@ -205,9 +204,21 @@ class King(ChessPiece):
                 
         return sorted(positions)
 
-board = main.defaultBoard()
 
-#king = King()
-#print("Possible Captures: ", King.possibleCaptures(King, board, 1, 3))
-#print("Current Captures: ", King.currentCaptures(King, board, 1, 3))
+# def drawBoard(board):
+#     for line in board:
+#         print(line)
+#     return
+
+# def defaultBoard():
+#     board = fileparser.fileParser("resources/level1.txt")
+#     drawBoard(board)
+#     return board
+
+# board = defaultBoard()
+# board = main.defaultBoard()
+
+# king = King()
+# print("Possible Captures: ", King.possibleCaptures(King, board, 1, 3))
+# print("Current Captures: ", King.currentCaptures(type(king), board, 1, 3))
 

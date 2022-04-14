@@ -1,3 +1,4 @@
+import chess
 import fileparser
 import ui
 
@@ -13,7 +14,7 @@ def resetBoard(size):
     return board
 
 def defaultBoard():
-    board = fileparser.fileParser("level1.txt")
+    board = fileparser.fileParser("resources/level1.txt")
     drawBoard(board)
     return board
 
@@ -23,7 +24,7 @@ def drawBoard(board):
         print(line)
     return
 
-def evalPos(position):
+def evalPos(board, newpos, visited):
     #check:
     #out of bounds
     #collide with piece
@@ -42,11 +43,28 @@ def doMove(move,position):
     return newpos
 
 
-def checkBoard(board):
+def checkCaptures(board): # returns True if number of captures match among all chess pieces
+    countCaptures = -1
+    for y in range(len(board)):
+        for x in range(len(board)):
+            if isinstance(board[y][x], chess.ChessPiece):
+                elemCaptures = len(board[y][x].currentCaptures(board, y, x))
+                if countCaptures == -1:
+                    countCaptures = elemCaptures
+                elif countCaptures != elemCaptures:
+                    return False
+
+    return True
+
+def gameOver(board):
     #check if last piece in corner
+    # if board[0][-1] == 1:
+    #     return #something
+    
     #check attacks
     #verify if n of attacks match
-    return 0
+    return False
+
 
 def game():
     #level = int(input("Choose level: "))
@@ -59,7 +77,7 @@ def game():
     validMove = False
 
     position = (len(board),0)
-    passedpositions = [position]
+    visited = [position]
 
     ui.drawBoard(board)
 
@@ -67,15 +85,15 @@ def game():
         while not validMove:
             move = ui.getMove()
             newpos = doMove(move,position)
-            validMove = evalPos(board, newpos, passedpositions)
+            validMove = evalPos(board, newpos, visited)
 
         validMove = False
         position = newpos
-        passedpositions.append(newpos)
+        visited.append(newpos)
 
         ui.drawBoard(board)
 
-        gameOver = checkBoard(board)
+        gameOver = gameOver(board)
 
         if gameOver == 1:
             print('You won!')
@@ -86,3 +104,5 @@ def game():
     return 0
 
 game()
+
+
