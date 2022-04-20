@@ -27,8 +27,17 @@ def drawBoard(board):
 def evalPos(board, newpos, visited):
     #check:
     #out of bounds
+    l = len(board)
+    if newpos[0] < 0 | newpos[0] > l | newpos[1] < 0 | newpos[1] > l:
+        return False
     #collide with piece
+    if board[newpos[0]][newpos[1]] != ' ' : 
+        return False
     #adjacent/visited position
+    for i in range(visited):
+        v = visited[i] 
+        if (v[0],v[1]) == newpos | (v[0]+1,v[1]) == newpos | (v[0]-1,v[1]) == newpos | (v[0],v[1]+1) == newpos | (v[0],v[1]-1) == newpos: 
+            return False
     return True
 
 def doMove(move,position):
@@ -58,12 +67,14 @@ def checkCaptures(board): # returns True if number of captures match among all c
 
 def gameOver(board):
     #check if last piece in corner
-    # if board[0][-1] == 1:
-    #     return #something
+    if board[0][len(board)-1] == ' ':
+         return False
     
     #check attacks
-    #verify if n of attacks match
-    return False
+    if checkCaptures(board):
+        return True
+    else:
+        return False
 
 
 def game():
