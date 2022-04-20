@@ -67,7 +67,7 @@ def checkCaptures(board): # returns True if number of captures match among all c
 
 def gameOver(board):
     #check if last piece in corner
-    if board[0][len(board)-1] != 1:
+    if board[0][-1] != 1:
          return False
     
     #check attacks
