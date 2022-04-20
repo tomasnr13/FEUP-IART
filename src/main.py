@@ -67,7 +67,7 @@ def checkCaptures(board): # returns True if number of captures match among all c
 
 def gameOver(board):
     #check if last piece in corner
-    if board[0][len(board)-1] == ' ':
+    if board[0][len(board)-1] != 1:
          return False
     
     #check attacks
@@ -100,6 +100,7 @@ def game():
 
         validMove = False
         position = newpos
+        board[position[0]][position[1]] = 1
         visited.append(newpos)
 
         ui.drawBoard(board)
