@@ -1,4 +1,4 @@
-import fileparser
+import src.fileparser as fileparser
 
 def resetBoard(size):
 

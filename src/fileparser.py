@@ -1,6 +1,6 @@
 
 def fileParser(filename):
-    f = open(filename, "r")
+    f = open("src/files/" + filename, "r")
 
     board = []
     size = int(f.readline())
@@ -16,4 +16,4 @@ def fileParser(filename):
     return board
 
 
-#print(fileParser("level1.txt"))
+print(fileParser("level1.txt"))

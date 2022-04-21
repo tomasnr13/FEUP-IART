@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import main
+import src.main as main
 
 class ChessPiece(ABC):
 
