@@ -15,46 +15,54 @@ def resetBoard(size):
 
 def defaultBoard():
     board = fileparser.fileParser("resources/level1.txt")
+    board[len(board)-1][0] = 1
     drawBoard(board)
     return board
 
 def drawBoard(board):
     draw(board)
-    for line in board:
-        print(line)
-    return
+    # for line in board:
+    #     print(line)
+    # return
 
 def evalPos(board, newpos, visited):
     #check:
     #out of bounds
     l = len(board)
-    print(l,newpos,'ai')
     if newpos[0] < 0 or newpos[0] >= l or newpos[1] < 0 or newpos[1] >= l:
-        print('1')
         return False
     #collide with piece
     if board[newpos[0]][newpos[1]] != 0 and board[newpos[0]][newpos[1]] != 1: 
-        print('2')
         return False
     #adjacent/visited position
     for i in range(len(visited)):
-        print(visited, 'visited')
         v = visited[i] 
-        if (v[0],v[1]) == newpos or (v[0]+1,v[1]) == newpos or (v[0]-1,v[1]) == newpos or (v[0],v[1]+1) == newpos or (v[0],v[1]-1) == newpos:
-            print('3') 
+        if (v[0],v[1]) == newpos :
+            return False
+        adjs = 0
+        if (newpos[0]-1,newpos[1]) == v : 
+            adjs+=1
+        if (newpos[0]+1,newpos[1]) == v : 
+            adjs+=1
+        if (newpos[0],newpos[1]-1) == v : 
+            adjs+=1
+        if (newpos[0],newpos[1]+1) == v : 
+            adjs+=1
+        
+        if adjs>1:
             return False
 
     return True
 
 def doMove(move,position):
     if move == "up":
-        newpos = (position[0],position[1]+1)
-    elif move == "down":
-        newpos = (position[0],position[1]-1)
-    elif move == "left":
         newpos = (position[0]-1,position[1])
-    else :
+    elif move == "down":
         newpos = (position[0]+1,position[1])
+    elif move == "left":
+        newpos = (position[0],position[1]-1)
+    else :
+        newpos = (position[0],position[1]+1)
     print(position, newpos)
     return newpos
 
@@ -91,13 +99,13 @@ def game():
     initialboard = defaultBoard()
 
     board = initialboard
-    gameOver = 0
+    game_over = 0
     validMove = False
 
     position = (len(board) - 1, 0)
     visited = [position]
 
-    while gameOver == 0:
+    while game_over == 0:
 
         while not validMove:
             move = getMove()
@@ -116,11 +124,11 @@ def game():
 
         draw(board)
 
-        gameOver = gameOver(board)
+        game_over = gameOver(board)
 
-        if gameOver == 1:
+        if game_over == 1:
             print('You won!')
-        elif gameOver == 2:
+        elif game_over == 2:
             print('Try again!')
             board=initialboard
     
