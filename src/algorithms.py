@@ -1,4 +1,4 @@
-
+import chess
 
 visited = []
 
@@ -89,19 +89,10 @@ def dfs(board, currpos, visited):
         for i in range(4):
             nb = neighbors[i]
 
-            if evalPos1(board, nb, currpath) and nb not in visited:
+            if evalPos(board, nb, currpath) and nb not in visited:
                 newpath = list(currpath)
                 newpath.append(nb)
                 q.append(newpath)
-
-
-def iter_deep(board, currpos, visited, maxdepth):
-    for i in range(maxdepth):
-        visited = []
-        retpath = id_dfs_aux(board,currpos,visited, i)
-        if retpath != []:
-            return retpath
-    return retpath
             
 
 def id_dfs_aux(board,currpos,depth):
@@ -128,7 +119,43 @@ def id_dfs_aux(board,currpos,depth):
                 q.append(newpath)
                 depth-=1
 
+def iter_deep(board, currpos, visited, maxdepth):
+    for i in range(maxdepth):
+        visited = []
+        retpath = id_dfs_aux(board,currpos,visited, i)
+        if retpath != []:
+            return retpath
+    return retpath
 
+
+def getDistance(position,board):
+    return position[0] + len(board)-position[1]
+
+def eval_function(position, currpath, board):
+    #getcaps(lastpos)
+    #getcaps(newpos)
+    #getdistance(newpos)
+    boardd = board[:]
+    newboard = board[:]
+    for line in range(len(board)):
+        for col in range(len(board)):
+            if (line,col) in currpath:
+                boardd[line][col] = 1
+                newboard[line][col] = 1
+
+    newboard[position[0]][position[1]]=1
+
+    d = getDistance(position, board)
+
+    for line in range(len(board)):
+        for col in range(len(board)):
+            if isinstance(boardd[line][col], chess.ChessPiece):
+                b_count = len(board[line][col].currentCaptures(boardd, line, col))
+            if isinstance(newboard[line][col], chess.ChessPiece):
+                nb_count = len(board[line][col].currentCaptures(newboard, line, col))
+
+    return (nb_count-b_count)+d/4
+    
 #def uniform_cost()
 
 #def greedy()
