@@ -28,28 +28,26 @@ def evalPos(board, newpos, visited):
     #check:
     #out of bounds
     l = len(board)
-    if newpos[0] < 0 or newpos[0] > l or newpos[1] < 0 or newpos[1] > l:
+    if newpos[0] < 0 or newpos[0] >= l or newpos[1] < 0 or newpos[1] >= l:
         return False
     #collide with piece
-    if board[newpos[0]][newpos[1]] != ' ' : 
+    if board[newpos[0]][newpos[1]] != 0 : 
         return False
-    #adjacent/visited position
-    for i in range(len(visited)):
-        v = visited[i] 
-        if (v[0],v[1]) == newpos :
-            return False
-        adjs = 0
-        if (newpos[0]-1,newpos[1]) == v : 
-            adjs+=1
-        if (newpos[0]+1,newpos[1]) == v : 
-            adjs+=1
-        if (newpos[0],newpos[1]-1) == v : 
-            adjs+=1
-        if (newpos[0],newpos[1]+1) == v : 
-            adjs+=1
-        
-        if adjs>1:
-            return False
+    #visited position  
+    if newpos in visited :
+        return False
+    #adjacent position 
+    adjs=0
+    if (newpos[0]-1,newpos[1]) in visited : 
+        adjs+=1
+    if (newpos[0]+1,newpos[1]) in visited : 
+        adjs+=1
+    if (newpos[0],newpos[1]-1) in visited : 
+        adjs+=1
+    if (newpos[0],newpos[1]+1) in visited : 
+        adjs+=1
+    if adjs>1:
+        return False
 
     return True
 
