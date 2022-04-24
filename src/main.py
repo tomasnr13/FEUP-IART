@@ -28,16 +28,22 @@ def evalPos(board, newpos, visited):
     #check:
     #out of bounds
     l = len(board)
-    if newpos[0] < 0 | newpos[0] > l | newpos[1] < 0 | newpos[1] > l:
+    print(l,newpos,'ai')
+    if newpos[0] < 0 or newpos[0] >= l or newpos[1] < 0 or newpos[1] >= l:
+        print('1')
         return False
     #collide with piece
-    if board[newpos[0]][newpos[1]] != ' ' : 
+    if board[newpos[0]][newpos[1]] != 0 and board[newpos[0]][newpos[1]] != 1: 
+        print('2')
         return False
     #adjacent/visited position
-    for i in range(visited):
+    for i in range(len(visited)):
+        print(visited, 'visited')
         v = visited[i] 
-        if (v[0],v[1]) == newpos | (v[0]+1,v[1]) == newpos | (v[0]-1,v[1]) == newpos | (v[0],v[1]+1) == newpos | (v[0],v[1]-1) == newpos: 
+        if (v[0],v[1]) == newpos or (v[0]+1,v[1]) == newpos or (v[0]-1,v[1]) == newpos or (v[0],v[1]+1) == newpos or (v[0],v[1]-1) == newpos:
+            print('3') 
             return False
+
     return True
 
 def doMove(move,position):
@@ -49,6 +55,7 @@ def doMove(move,position):
         newpos = (position[0]-1,position[1])
     else :
         newpos = (position[0]+1,position[1])
+    print(position, newpos)
     return newpos
 
 
@@ -87,16 +94,20 @@ def game():
     gameOver = 0
     validMove = False
 
-    position = (len(board),0)
+    position = (len(board) - 1, 0)
     visited = [position]
 
     while gameOver == 0:
-        print('a')
+
         while not validMove:
             move = getMove()
-            print('move', move)
-            newpos = doMove(move,position)
-            validMove = evalPos(board, newpos, visited)
+            if move:
+                newpos = doMove(move,position)
+                validMove = evalPos(board, newpos, visited)
+                print(move, '<- move, validMove ->', validMove)
+            #move is none when nothing is pressed, false if "x" option or esc is pressed
+            if move == False:
+                return 0
 
         validMove = False
         position = newpos

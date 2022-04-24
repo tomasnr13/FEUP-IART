@@ -117,37 +117,32 @@ class ChessBoard:
 b = ChessBoard([])
 
 def getMove():
-    print(b.getMove())
-    return b.getMove()
+    for event in pygame.event.get():
+        if event.type == KEYDOWN:
+
+            if event.key == K_UP:
+                return('up')
+                
+            if event.key == K_DOWN:
+                return('down')
+                
+                
+            if event.key == K_RIGHT:
+                return('right')
+
+            if event.key == K_LEFT:
+                return('left')
+        
+            if event.key == K_ESCAPE:
+                return False
+
+        elif event.type == QUIT :
+            return False
 
 def draw(board):
     b.updateBoard(board)
     size = b.size
 
     running = True
-    while running:
-            for event in pygame.event.get():
-                if event.type == KEYDOWN:
 
-                    if event.key == K_UP:
-                        b.setMove('up')
-                        print('up')
-                        return
-
-                    if event.key == K_DOWN:
-                        b.setMove('down')
-                        print('down')
-                        return
-                        
-                    if event.key == K_RIGHT:
-                        b.setMove('right')
-                        print('right')
-                        return
-
-                    if event.key == K_LEFT:
-                        b.setMove('left')
-                        print('left')
-                        return
-
-                elif event.type == QUIT or event.type == K_ESCAPE:
-                    running = False
+                
