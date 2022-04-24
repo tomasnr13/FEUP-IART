@@ -1,6 +1,6 @@
 import chess
 import fileparser
-import ui
+from ui import draw, getMove
 
 def resetBoard(size):
 
@@ -18,8 +18,8 @@ def defaultBoard():
     drawBoard(board)
     return board
 
-
 def drawBoard(board):
+    draw(board)
     for line in board:
         print(line)
     return
@@ -90,11 +90,11 @@ def game():
     position = (len(board),0)
     visited = [position]
 
-    ui.drawBoard(board)
-
     while gameOver == 0:
+        print('a')
         while not validMove:
-            move = ui.getMove()
+            move = getMove()
+            print('move', move)
             newpos = doMove(move,position)
             validMove = evalPos(board, newpos, visited)
 
@@ -103,7 +103,7 @@ def game():
         board[position[0]][position[1]] = 1
         visited.append(newpos)
 
-        ui.drawBoard(board)
+        draw(board)
 
         gameOver = gameOver(board)
 

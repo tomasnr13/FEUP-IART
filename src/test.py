@@ -43,7 +43,6 @@ for y in range(8):
     chess_board.append(chess_row)   
 
 
-
 for row in chess_board:
     for square in row:
         surf = pygame.Surface((square.width_height, square.width_height))
