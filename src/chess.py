@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-#import main
-#import fileparser
 
 class ChessPiece(ABC):
     @abstractmethod
@@ -205,20 +203,26 @@ class King(ChessPiece):
         return sorted(positions)
 
 
-# def drawBoard(board):
-#     for line in board:
-#         print(line)
-#     return
 
-# def defaultBoard():
-#     board = fileparser.fileParser("resources/level1.txt")
-#     drawBoard(board)
-#     return board
+def checkCaptures(board): # returns True if number of captures match among all chess pieces
+    countCaptures = -1
+    for y in range(len(board)):
+        for x in range(len(board)):
+            if isinstance(board[y][x], ChessPiece):
+                elemCaptures = len(board[y][x].currentCaptures(board, y, x))
+                if countCaptures == -1:
+                    countCaptures = elemCaptures
+                elif countCaptures != elemCaptures:
+                    return False
 
-# board = defaultBoard()
-# board = main.defaultBoard()
+    return True
 
-# king = King()
-# print("Possible Captures: ", King.possibleCaptures(King, board, 1, 3))
-# print("Current Captures: ", King.currentCaptures(type(king), board, 1, 3))
+
+def captureDiff(board):
+    captures = {}
+    for y in range(len(board)):
+        for x in range(len(board)):
+            if isinstance(board[y][x], ChessPiece):
+                captures[(y, x)] = len(board[y][x].currentCaptures(board, y, x))
+    return max(captures.values) - min(captures.values)
 
