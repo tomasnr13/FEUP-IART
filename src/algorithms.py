@@ -150,9 +150,9 @@ def eval_function(position, currpath, board):
     for line in range(len(board)):
         for col in range(len(board)):
             if isinstance(boardd[line][col], chess.ChessPiece):
-                b_count = len(board[line][col].currentCaptures(boardd, line, col))
+                b_count = len(boardd[line][col].currentCaptures(boardd, line, col))
             if isinstance(newboard[line][col], chess.ChessPiece):
-                nb_count = len(board[line][col].currentCaptures(newboard, line, col))
+                nb_count = len(newboard[line][col].currentCaptures(newboard, line, col))
 
     return (nb_count-b_count)+d/4
     
