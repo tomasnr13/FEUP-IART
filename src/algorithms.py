@@ -1,39 +1,10 @@
-import chess
+import chess, utils, main
 
 visited = []
 
 q = []
 
-def evalPos(board, newpos, visited):
-    #check:
-    #out of bounds
-    l = len(board)
-    if newpos[0] < 0 or newpos[0] >= l or newpos[1] < 0 or newpos[1] >= l:
-        return False
-    #collide with piece
-    if board[newpos[0]][newpos[1]] != 0 : 
-        return False
-    #visited position  
-    if newpos in visited :
-        return False
-    #adjacent position 
-    adjs=0
-    if (newpos[0]-1,newpos[1]) in visited : 
-        adjs+=1
-    if (newpos[0]+1,newpos[1]) in visited : 
-        adjs+=1
-    if (newpos[0],newpos[1]-1) in visited : 
-        adjs+=1
-    if (newpos[0],newpos[1]+1) in visited : 
-        adjs+=1
-    if adjs>1:
-        return False
-
-    return True
-
-
-
-def algorithmcall(alg, board, position, visited):
+def algorithmCall(alg, board, position, visited):
     visited = []
     q = []
     if(alg == "bfs"):
@@ -68,7 +39,7 @@ def bfs(board, position, visited):
         for i in range(4):
             nb = neighbors[i]
 
-            if evalPos(board, nb, currpath) and nb not in visited:
+            if utils.validPos(board, nb, currpath) and nb not in visited:
                 newpath = list(currpath)
                 newpath.append(nb)
                 print('newpath: ',newpath)
@@ -81,7 +52,7 @@ def dfs(board, currpos, visited):
         currpath = q.pop()
         currpos = currpath[-1]
 
-        if currpos == (0,len(board)-1) : 
+        if currpos == (0,len(board)-1): 
             return currpath
 
         visited.append(currpos)
@@ -89,7 +60,7 @@ def dfs(board, currpos, visited):
         for i in range(4):
             nb = neighbors[i]
 
-            if evalPos(board, nb, currpath) and nb not in visited:
+            if utils.validPos(board, nb, currpath) and nb not in visited:
                 newpath = list(currpath)
                 newpath.append(nb)
                 q.append(newpath)
@@ -113,7 +84,7 @@ def id_dfs_aux(board,currpos,depth):
         for i in range(4):
             nb = neighbors[i]
 
-            if evalPos(board, nb, currpath) and nb not in visited:
+            if utils.validPos(board, nb, currpath) and nb not in visited:
                 newpath = list(currpath)
                 newpath.append(nb)
                 q.append(newpath)
@@ -128,10 +99,7 @@ def iter_deep(board, currpos, visited, maxdepth):
     return retpath
 
 
-def getDistance(position,board):
-    return position[0] + len(board)-position[1]
-
-def eval_function(position, currpath, board):
+def evalFunction(position, currpath, board):
     #getcaps(lastpos)
     #getcaps(newpos)
     #getdistance(newpos)
@@ -145,7 +113,7 @@ def eval_function(position, currpath, board):
 
     newboard[position[0]][position[1]]=1
 
-    d = getDistance(position, board)
+    d = utils.getDistance(position, board)
 
     for line in range(len(board)):
         for col in range(len(board)):
@@ -162,9 +130,5 @@ def eval_function(position, currpath, board):
 
 #def astar()
 
-board = [[0, 0, 0, 0, 0],
-        [0, 'T', 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 'K', 0, 0, 0],
-        [0, 0, 0, 0, 0]]
+board = main.defaultBoard()
 print(dfs(board,(4,0),[]))

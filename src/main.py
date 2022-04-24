@@ -1,4 +1,4 @@
-import chess
+import chess, utils
 import fileparser
 from ui import draw, getMove
 
@@ -21,36 +21,7 @@ def defaultBoard():
 
 def drawBoard(board):
     draw(board, (len(board)-1, 0))
-    # for line in board:
-    #     print(line)
-    # return
 
-def evalPos(board, newpos, visited):
-    #check:
-    #out of bounds
-    l = len(board)
-    if newpos[0] < 0 or newpos[0] >= l or newpos[1] < 0 or newpos[1] >= l:
-        return False
-    #collide with piece
-    if board[newpos[0]][newpos[1]] != 0 : 
-        return False
-    #visited position  
-    if newpos in visited :
-        return False
-    #adjacent position 
-    adjs=0
-    if (newpos[0]-1,newpos[1]) in visited : 
-        adjs+=1
-    if (newpos[0]+1,newpos[1]) in visited : 
-        adjs+=1
-    if (newpos[0],newpos[1]-1) in visited : 
-        adjs+=1
-    if (newpos[0],newpos[1]+1) in visited : 
-        adjs+=1
-    if adjs>1:
-        return False
-
-    return True
 
 def doMove(move,position):
     if move == "up":
@@ -65,26 +36,13 @@ def doMove(move,position):
     return newpos
 
 
-def checkCaptures(board): # returns True if number of captures match among all chess pieces
-    countCaptures = -1
-    for y in range(len(board)):
-        for x in range(len(board)):
-            if isinstance(board[y][x], chess.ChessPiece):
-                elemCaptures = len(board[y][x].currentCaptures(board, y, x))
-                if countCaptures == -1:
-                    countCaptures = elemCaptures
-                elif countCaptures != elemCaptures:
-                    return False
-
-    return True
-
 def gameOver(board):
     #check if last piece in corner
     if board[0][-1] != 1:
          return False
     
     #check attacks
-    if checkCaptures(board):
+    if chess.checkCaptures(board):
         return True
     else:
         return False
@@ -103,13 +61,13 @@ def game():
     position = (len(board) - 1, 0)
     visited = [position]
 
-    while game_over == 0:
+    while not game_over:
 
         while not validMove:
             move = getMove()
             if move:
                 newpos = doMove(move,position)
-                validMove = evalPos(board, newpos, visited)
+                validMove = utils.validPos(board, newpos, visited)
                 print(move, '<- move, validMove ->', validMove)
             #move is none when nothing is pressed, false if "x" option or esc is pressed
             if move == False:
@@ -132,6 +90,6 @@ def game():
     
     return 0
 
-game()
-
+if __name__ == "__main__":
+    game()
 
