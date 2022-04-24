@@ -1,6 +1,6 @@
 import chess
 import fileparser
-import ui
+from ui import draw, getMove
 
 def resetBoard(size):
 
@@ -15,14 +15,15 @@ def resetBoard(size):
 
 def defaultBoard():
     board = fileparser.fileParser("resources/level1.txt")
+    board[len(board)-1][0] = 1
     drawBoard(board)
     return board
 
-
 def drawBoard(board):
-    for line in board:
-        print(line)
-    return
+    draw(board)
+    # for line in board:
+    #     print(line)
+    # return
 
 def evalPos(board, newpos, visited):
     #check:
@@ -53,13 +54,14 @@ def evalPos(board, newpos, visited):
 
 def doMove(move,position):
     if move == "up":
-        newpos = (position[0],position[1]+1)
-    elif move == "down":
-        newpos = (position[0],position[1]-1)
-    elif move == "left":
         newpos = (position[0]-1,position[1])
-    else :
+    elif move == "down":
         newpos = (position[0]+1,position[1])
+    elif move == "left":
+        newpos = (position[0],position[1]-1)
+    else :
+        newpos = (position[0],position[1]+1)
+    print(position, newpos)
     return newpos
 
 
@@ -95,32 +97,36 @@ def game():
     initialboard = defaultBoard()
 
     board = initialboard
-    gameOver = 0
+    game_over = 0
     validMove = False
 
-    position = (len(board),0)
+    position = (len(board) - 1, 0)
     visited = [position]
 
-    ui.drawBoard(board)
+    while game_over == 0:
 
-    while gameOver == 0:
         while not validMove:
-            move = ui.getMove()
-            newpos = doMove(move,position)
-            validMove = evalPos(board, newpos, visited)
+            move = getMove()
+            if move:
+                newpos = doMove(move,position)
+                validMove = evalPos(board, newpos, visited)
+                print(move, '<- move, validMove ->', validMove)
+            #move is none when nothing is pressed, false if "x" option or esc is pressed
+            if move == False:
+                return 0
 
         validMove = False
         position = newpos
         board[position[0]][position[1]] = 1
         visited.append(newpos)
 
-        ui.drawBoard(board)
+        draw(board)
 
-        gameOver = gameOver(board)
+        game_over = gameOver(board)
 
-        if gameOver == 1:
+        if game_over == 1:
             print('You won!')
-        elif gameOver == 2:
+        elif game_over == 2:
             print('Try again!')
             board=initialboard
     
