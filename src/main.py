@@ -20,7 +20,7 @@ def defaultBoard():
     return board
 
 def drawBoard(board):
-    draw(board)
+    draw(board, (len(board)-1, 0))
     # for line in board:
     #     print(line)
     # return
@@ -120,7 +120,7 @@ def game():
         board[position[0]][position[1]] = 1
         visited.append(newpos)
 
-        draw(board)
+        draw(board, newpos)
 
         game_over = gameOver(board)
 

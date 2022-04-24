@@ -1,5 +1,6 @@
 from curses import KEY_F0
 import pygame
+import math
 
 from pygame.locals import (
     K_UP,
@@ -37,7 +38,6 @@ class BoardSquare:
 
         return (x_coordinate, y_coordinate)
 
-
 class ChessBoard:
     def __init__(self, board):
         self.size = len(board)
@@ -47,6 +47,9 @@ class ChessBoard:
         self.size = len(board)
         self.drawBoard(board)
     
+    def setCurPos(self, pos):
+        self.cur_pos = pos
+
     def setMove(self, move):
         self.move = move
     
@@ -81,9 +84,15 @@ class ChessBoard:
 
                 if (square.value == 1):
                     if square.is_white:
-                        surf.fill((108, 187, 60))
+                        if(self.cur_pos == (square.y, square.x)):
+                            surf.fill((108, 187, 60))
+                        else:
+                            surf.fill((108, 187, 60))
                     else:
-                        surf.fill((0, 128, 0))
+                        if(self.cur_pos == (square.y, square.x)):
+                            surf.fill((0, 128, 0))
+                        else:
+                            surf.fill((0, 128, 0))
 
                     screen.blit(surf, square.calculate_coordinates())
 
@@ -110,6 +119,11 @@ class ChessBoard:
                 elif (isinstance(square.value, Horse)):
                     image = pygame.image.load(r'images/horsePiece.png')
                     image = pygame.transform.scale(image, (square.width_height, square.width_height))
+                    screen.blit(image, square.calculate_coordinates())
+
+                if(self.cur_pos == (square.y, square.x)):
+                    image = pygame.image.load(r'images/snakeEyes.png')
+                    image = pygame.transform.scale(image, (square.width_height, square.width_height/2))
                     screen.blit(image, square.calculate_coordinates())
 
                 pygame.display.flip()
@@ -139,10 +153,9 @@ def getMove():
         elif event.type == QUIT :
             return False
 
-def draw(board):
+def draw(board, cur_pos):
+    b.setCurPos(cur_pos)
     b.updateBoard(board)
     size = b.size
-
-    running = True
 
                 
