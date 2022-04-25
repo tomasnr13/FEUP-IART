@@ -14,8 +14,7 @@ import copy
 class SnakeNode:
 
     def __init__(self, board, posY=-1, posX=0, previousNode=None, distance=0):
-        if (posY==-1):
-            posY += len(board)
+        if (posY==-1): posY += len(board)
         self.posY = posY
         self.posX = posX
         self.board = board
@@ -60,6 +59,7 @@ class SnakeNode:
                 utils.printBoard(boardCopy)
 
                 edgeNodesList.append(SnakeNode(boardCopy, newPos[0], newPos[1], self, distance))
+
         #up
         if y > 0 and self.board[y-1][x] == 0:
             newPos = (y-1, x)

@@ -1,3 +1,5 @@
+import chess
+
 def getDistance(position,board):
     return position[0] + len(board)-position[1]
 
@@ -32,7 +34,7 @@ def printBoard(board):
     for y in range(len(board)):
         line = []
         for x in range(len(board)):
-            if isinstance(board[y][x], ChessPiece):
+            if isinstance(board[y][x], chess.ChessPiece):
                 line += board[y][x].letter
             else:
                 line += [board[y][x]]
