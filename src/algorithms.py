@@ -131,4 +131,4 @@ def evalFunction(position, currpath, board):
 #def astar()
 
 board = main.defaultBoard()
-print(dfs(board,(4,0),[]))
+print(bfs(board,(4,0),[]))

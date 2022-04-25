@@ -23,7 +23,7 @@ class SnakeNode:
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.posY == other.posY and self.posX == other.posX
+            return self.posY == other.posY and self.posX == other.posX and self.board == other.board
         return False
 
     def __repr__(self):
@@ -39,7 +39,7 @@ class SnakeNode:
         edgeNodesList = []
 
         y, x = self.posY, self.posX
-
+        
         #down
         if y < len(self.board)-1 and self.board[y+1][x] == 0:
             newPos = (y+1, x)
@@ -48,15 +48,13 @@ class SnakeNode:
 
             adjs = [(newPos[0]-1,newPos[1]), (newPos[0]+1,newPos[1]), (newPos[0],newPos[1]-1), (newPos[0],newPos[1]+1)]
             for pos in adjs:
-                if pos[0] >= 0 and pos[1] >= 0 and pos[0] < len(self.board) and pos[1] < len(self.board):
+                if utils.insideBounds(pos, self.board):
                     if self.board[pos[0]][pos[1]] == 1:
                         visited_adjs += 1
-            print(newPos, "down")
-            
+
             if visited_adjs <= 1: 
                 boardCopy = copy.deepcopy(self.board)           
                 boardCopy[y+1][x] = 1
-                utils.printBoard(boardCopy)
 
                 edgeNodesList.append(SnakeNode(boardCopy, newPos[0], newPos[1], self, distance))
 
@@ -68,16 +66,14 @@ class SnakeNode:
             adjs = [(newPos[0]-1, newPos[1]), (newPos[0]+1,newPos[1]), (newPos[0],newPos[1]-1), (newPos[0],newPos[1]+1)]
             
             for pos in adjs:
-                if pos[0] >= 0 and pos[1] >= 0 and pos[0] < len(self.board) and pos[1] < len(self.board):
+                if utils.insideBounds(pos, self.board):
                     if self.board[pos[0]][pos[1]] == 1:
                         visited_adjs += 1
 
-            print(newPos, "up")
 
             if visited_adjs <= 1:   
                 boardCopy = copy.deepcopy(self.board)           
                 boardCopy[y-1][x] = 1
-                utils.printBoard(boardCopy)
 
                 edgeNodesList.append(SnakeNode(boardCopy, newPos[0], newPos[1], self, distance))
 
@@ -91,17 +87,14 @@ class SnakeNode:
             visited_adjs = 0
 
             for pos in adjs:
-                if pos[0] >= 0 and pos[1] >= 0 and pos[0] < len(self.board) and pos[1] < len(self.board):
+                if utils.insideBounds(pos, self.board):
                     if self.board[pos[0]][pos[1]] == 1:
                         visited_adjs += 1
 
-            print(newPos, "right")
 
             if visited_adjs <= 1:   
                 boardCopy = copy.deepcopy(self.board)           
                 boardCopy[y][x+1] = 1
-                utils.printBoard(boardCopy)
-
                 edgeNodesList.append(SnakeNode(boardCopy, newPos[0], newPos[1], self, distance))
 
         #left
@@ -113,15 +106,13 @@ class SnakeNode:
             visited_adjs = 0
             
             for pos in adjs:
-                if pos[0] >= 0 and pos[1] >= 0 and pos[0] < len(self.board) and pos[1] < len(self.board):
+                if utils.insideBounds(pos, self.board):
                     if self.board[pos[0]][pos[1]] == 1:
                         visited_adjs += 1
-            print(newPos, "left")
 
             if visited_adjs <= 1:   
                 boardCopy = copy.deepcopy(self.board)           
                 boardCopy[y][x-1] = 1
-                utils.printBoard(boardCopy)
                 edgeNodesList.append(SnakeNode(boardCopy, newPos[0], newPos[1], self, distance))
 
         return edgeNodesList
@@ -136,7 +127,17 @@ def heuristics(node):
 
 board = fileparser.fileParser("resources/level1.txt")
 s = SnakeNode(board)
-# print(s.edgeNodes())
 
+
+print(node_algorithms.dfs(s, condition))
 
 print(node_algorithms.bfs(s, condition))
+
+print(node_algorithms.it_deep(s, condition))
+
+print(node_algorithms.ucost(s, condition))
+
+print(node_algorithms.greedy(s, condition, heuristics))
+
+print(node_algorithms.astar(s, condition, heuristics))
+

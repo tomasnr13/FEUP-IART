@@ -16,7 +16,7 @@ def getPath(node):
 
     return path
 
-
+#breadth first search
 def bfs(initial, condition):
 
     nodesToVisit = [initial]
@@ -25,19 +25,20 @@ def bfs(initial, condition):
     while (nodesToVisit):
         currentNode = nodesToVisit.pop(0)
 
-        if (currentNode in visited): continue
+        if (currentNode in visited): 
+             continue
 
         visited.append(currentNode)
 
         if (condition(currentNode)):
-            return f'BFS Result: \n{getPath(currentNode)}\nVisited {len(visited) + 1} nodes:\n{visited}\n'
+            return f'BFS Result: \n{getPath(currentNode)}\nVisited {len(visited) + 1}\n'# nodes:\n{visited}\n'
 
         edgeNodes = currentNode.edgeNodes()
         nodesToVisit += edgeNodes
 
     return None
 
-
+#depth first search
 def dfs(node, condition, visited=[]):
 
     if (not node or node in visited): return None
@@ -52,13 +53,13 @@ def dfs(node, condition, visited=[]):
     return None
 
 
+#depth-limited search
 def dls(node, condition, maxDepth, visited=[], depth=0):
 
     if (node in visited): return (None, False)
     if (condition(node)):
-        return (
-            f'DLS Result (max depth of {maxDepth}): \n{getPath(node)}\nVisited {len(visited) + 1} nodes:\n{visited + [node]}\n',
-            False)
+        return (f'DLS Result (max depth of {maxDepth}):\n{getPath(node)}\n Visited {len(visited) + 1} nodes:\n{visited + [node]}\n', False)
+            
     if (maxDepth == depth): return (None, visited != [])
 
     for edgeNode in node.edgeNodes():
@@ -69,7 +70,7 @@ def dls(node, condition, maxDepth, visited=[], depth=0):
 
     return (None, visited == [])
 
-
+#iterative deepening 
 def it_deep(initial, condition):
 
     path = None
@@ -83,7 +84,7 @@ def it_deep(initial, condition):
 
         curDepth += 1
 
-
+#uniform cost
 def ucost(initial, condition):
 
     nodesToVisit = PriorityQueue()
@@ -98,7 +99,7 @@ def ucost(initial, condition):
         visited.append(currentNode)
 
         if (condition(currentNode)):
-            return f'UCost Result: Visited Nodes: {len(visited) + 1} \n'
+            return f'UCost Result: {getPath(node)}\n Visited Nodes: {len(visited) + 1} \n'
 
         edgeNodes = currentNode.edgeNodes(currentNode.distance + 1)
 
@@ -123,7 +124,6 @@ def greedy(initial, condition, heuristic):
         visited.append(currentNode)
 
         if (condition(currentNode)):
-            utils.printBoard(currentNode.board)
             return f'Greedy Result: Visited Nodes: {len(visited)}, {getPath(currentNode)} \n'
 
         edgeNodes = currentNode.edgeNodes()
@@ -148,7 +148,7 @@ def astar(initial, condition, heuristic):
         visited.append(currentNode)
 
         if (condition(currentNode)):
-            return f'AStar Result: Visited Nodes: {len(visited) + 1} \n'
+            return f'AStar Result: Visited Nodes: {len(visited) + 1} , {getPath(currentNode)} \n'
 
         edgeNodes = currentNode.edgeNodes(currentNode.distance + 1)
 

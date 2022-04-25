@@ -3,6 +3,12 @@ import chess
 def getDistance(position,board):
     return position[0] + len(board)-position[1]
 
+def insideBounds(pos, board):
+    l = len(board)
+    if pos[0] < 0 or pos[0] >= l or pos[1] < 0 or pos[1] >= l:
+        return False
+    return True
+
 def validPos(board, newpos, visited):
     #check:
     
