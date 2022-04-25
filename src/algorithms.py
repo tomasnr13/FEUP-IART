@@ -28,53 +28,85 @@ def bfs(board, position, visited):
     while q:
         currpath = q.pop(0)
         currpos = currpath[-1]
-        print('currpath: ',currpath)
-        print('currpos: ',currpos)
 
-        if currpos == (0,len(board)-1) : 
-            return currpath
+        if currpos == (0,len(board)-1):
+            newboard = board[:]
+            for pos in currpath:
+                newboard[pos[0]][pos[1]] = 1
+
+            if chess.checkCaptures(newboard): 
+                return currpath
+            else:
+                currpath = q.pop(0)
+                currpos = currpath[-1]
+        
 
         visited.append(currpos)
         neighbors = [(currpos[0]-1,currpos[1]),(currpos[0]+1,currpos[1]),(currpos[0],currpos[1]-1),(currpos[0],currpos[1]+1)]
+        
         for i in range(4):
             nb = neighbors[i]
 
             if utils.validPos(board, nb, currpath) and nb not in visited:
                 newpath = list(currpath)
                 newpath.append(nb)
-                print('newpath: ',newpath)
                 q.append(newpath)
+
+
+
+
 
 def dfs(board, currpos, visited):
     q.append([currpos])
 
     while q:
+        print("paths: " , q)
         currpath = q.pop()
         currpos = currpath[-1]
+        print("currpos: ", currpos)
 
-        if currpos == (0,len(board)-1): 
-            return currpath
+        if currpos == (0,len(board)-1):
+            newboard = board[:]
+            for pos in currpath:
+                newboard[pos[0]][pos[1]] = 1
 
-        visited.append(currpos)
-        neighbors = [(currpos[0],currpos[1]+1),(currpos[0],currpos[1]-1),(currpos[0]+1,currpos[1]),(currpos[0]-1,currpos[1])]
+            if chess.checkCaptures(newboard): 
+                return currpath
+            else:
+                continue
+
+        #visited.append(currpos)
+        neighbors = [(currpos[0]-1,currpos[1]),(currpos[0]+1,currpos[1]),(currpos[0],currpos[1]-1),(currpos[0],currpos[1]+1)]
         for i in range(4):
             nb = neighbors[i]
 
-            if utils.validPos(board, nb, currpath) and nb not in visited:
+            nbc=0
+            if utils.validPos(board, nb, currpath): #and nb not in visited:
+                nbc+=1
                 newpath = list(currpath)
                 newpath.append(nb)
                 q.append(newpath)
+        print("nbc: ",nbc)
             
 
 def id_dfs_aux(board,currpos,depth):
     q.append([currpos])
 
     while q:
+        print(q)
         currpath = q.pop()
         currpos = currpath[-1]
 
-        if currpos == (0,len(board)-1) : 
-            return currpath
+        if currpos == (0,len(board)-1):
+            newboard = board[:]
+            for pos in currpath:
+                newboard[pos[0]][pos[1]] = 1
+
+            if chess.checkCaptures(newboard): 
+                return currpath
+            else:
+                currpath = q.pop(0)
+                currpos = currpath[-1]
 
         if depth == 0 : 
             return []
@@ -131,4 +163,10 @@ def evalFunction(position, currpath, board):
 #def astar()
 
 board = main.defaultBoard()
-print(dfs(board,(4,0),[]))
+#print(dfs(board,(4,0),[]))
+print(board)
+newboard=board[:]
+newboard[0][0]=7
+print(board)
+print(newboard)
+#print(utils.validPos(board,(2,0),[(4,0),(3,0)])) 

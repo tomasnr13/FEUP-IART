@@ -39,13 +39,13 @@ def doMove(move,position):
 def gameOver(board):
     #check if last piece in corner
     if board[0][-1] != 1:
-         return False
+         return 0
     
     #check attacks
     if chess.checkCaptures(board):
-        return True
+        return 1
     else:
-        return False
+        return 2
 
 
 def game():
@@ -54,14 +54,14 @@ def game():
     
     initialboard = defaultBoard()
 
-    board = initialboard
+    board = initialboard[:]
     game_over = 0
     validMove = False
 
     position = (len(board) - 1, 0)
     visited = [position]
 
-    while not game_over:
+    while game_over != 1:
 
         while not validMove:
             move = getMove()
@@ -84,9 +84,12 @@ def game():
 
         if game_over == 1:
             print('You won!')
+            return 0
         elif game_over == 2:
             print('Try again!')
-            board=initialboard
+            board=initialboard[:]
+            position = (len(board) - 1, 0)
+            visited = [position]
     
     return 0
 
