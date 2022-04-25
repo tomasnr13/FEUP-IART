@@ -5,6 +5,9 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'ui'))
 from ui.menu import main_menu
 from ui.game import Game
+import node_algorithms
+import snake
+import ui.bot
 
 game_obj = Game()
 
@@ -29,8 +32,23 @@ def getBoard(level):
 def drawBoard(board, pos):
     game_obj.board.update(board, pos)
 
+def runAlgorithm(board, algorithm):
+    s = snake.SnakeNode(board)
+    if algorithm == "depth first search":
+        return(node_algorithms.dfs(s, snake.condition))
+    elif algorithm == "breadth first search":
+        return(node_algorithms.bfs(s, snake.condition))
+    elif algorithm == "iterative deepening":
+        return(node_algorithms.it_deep(s, snake.condition))
+    elif algorithm == "uniform cost":
+        return(node_algorithms.ucost(s, snake.condition))
+    elif algorithm == "greedy":
+        return(node_algorithms.greedy(s, snake.condition, snake.heuristics, board))
+    elif algorithm == "a star":
+        return(node_algorithms.astar(s, snake.condition, snake.heuristics, board))
 
 def doMove(move,position):
+    newpos = None
     if move == "up":
         newpos = (position[0]-1,position[1])
     elif move == "down":
@@ -39,7 +57,6 @@ def doMove(move,position):
         newpos = (position[0],position[1]-1)
     else :
         newpos = (position[0],position[1]+1)
-    print(position, newpos)
     return newpos
 
 
@@ -68,15 +85,15 @@ def game():
     position = (len(board) - 1, 0)
     visited = [position]
 
-    while not game_over:
+    if mode == "player":
 
-        if mode == "player":
+        while not game_over:
             while not validMove:
                 move = game_obj.getMove()
                 if move:
                     newpos = doMove(move,position)
                     validMove = utils.validPos(board, newpos, visited)
-                    print(move, '<- move, validMove ->', validMove)
+                    # print(move, '<- move, validMove ->', validMove)
                 #move is none when nothing is pressed, false if "x" option or esc is pressed
                 if move == False:
                     return 0
@@ -86,9 +103,9 @@ def game():
             board[position[0]][position[1]] = 1
             visited.append(newpos)
 
-        game_obj.board.update(board, newpos)
+            game_obj.board.update(board, newpos)
 
-        game_over = gameOver(board)
+            game_over = gameOver(board)
 
         if game_over == 1:
             print('You won!')
@@ -96,6 +113,11 @@ def game():
             print('Try again!')
             board=initialboard
     
+    else:
+        path = runAlgorithm(board, mode)
+        bot = ui.bot.Bot(path, board)
+        bot.drawPath()
+
     return 0
 
 if __name__ == "__main__":

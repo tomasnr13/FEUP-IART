@@ -1,5 +1,6 @@
 from queue import PriorityQueue
 import time
+from webbrowser import get
 
 
 def getPath(node):
@@ -32,7 +33,8 @@ def bfs(initial, cond):
         visited.append(currNode)
 
         if (cond(currNode)):
-            return f'BFS Result: \n{getPath(currNode)}\nVisited {len(visited) + 1}\nTime: {round(time.time() - start_time, 6)} seconds\n'
+            # return f'BFS Result: \n{getPath(currNode)}\nVisited {len(visited) + 1}\nTime: {round(time.time() - start_time, 6)} seconds\n'
+            return getPath(currNode)
 
         edgeNodes = currNode.edgeNodes()
         nodesToVisit += edgeNodes
@@ -46,7 +48,8 @@ def dfs(node, cond, visited=[]):
     if (not node or node in visited):
         return None
     if (cond(node)):
-        return f'DFS Result: \n{getPath(node)}\nVisited {len(visited) + 1} nodes:\n{visited + [node]}\nTime: {round(time.time() - start_time, 6)} seconds\n'
+        # return f'DFS Result: \n{getPath(node)}\nVisited {len(visited) + 1} nodes:\n{visited + [node]}\nTime: {round(time.time() - start_time, 6)} seconds\n'
+        return getPath(node)
 
     for edgeNode in node.edgeNodes():
         if (edgeNode in visited): continue
@@ -56,13 +59,14 @@ def dfs(node, cond, visited=[]):
     return None
 
 
-#depth-limited search
+#depth first search
 def dls(node, cond, maxDepth, visited=[], depth=0):
     start_time = time.time()
 
     if (node in visited): return (None, False)
     if (cond(node)):
-        return (f'DLS Result (max depth of {maxDepth}):\n{getPath(node)}\n Visited {len(visited) + 1} nodes:\n{visited + [node]}\nTime: {round(time.time() - start_time, 6)} seconds\n', False)
+        # return (f'DLS Result (max depth of {maxDepth}):\n{getPath(node)}\n Visited {len(visited) + 1} nodes:\n{visited + [node]}\nTime: {round(time.time() - start_time, 6)} seconds\n', False)
+        return (getPath(node), False)
             
     if (maxDepth == depth): return (None, visited != [])
 
@@ -104,7 +108,8 @@ def ucost(initial, cond):
         visited.append(currNode)
 
         if (cond(currNode)):
-            return f'UCost Result: {getPath(currNode)}\n Visited Nodes: {len(visited) + 1} \nTime: {round(time.time() - start_time, 6)} seconds\n'
+            # return f'UCost Result: {getPath(currNode)}\n Visited Nodes: {len(visited) + 1} \nTime: {round(time.time() - start_time, 6)} seconds\n'
+            return getPath(currNode)
 
         edgeNodes = currNode.edgeNodes(currNode.distance + 1)
 
@@ -114,11 +119,11 @@ def ucost(initial, cond):
     return None
 
 
-def greedy(initial, cond, heuristic):
+def greedy(initial, cond, heuristic, board):
     start_time = time.time()
 
     nodesToVisit = PriorityQueue()
-    nodesToVisit.put((heuristic(initial), initial))
+    nodesToVisit.put((heuristic(initial, board), initial))
 
     visited = []
 
@@ -130,21 +135,22 @@ def greedy(initial, cond, heuristic):
         visited.append(currNode)
 
         if (cond(currNode)):
-            return f'Greedy Result: Visited Nodes: {len(visited)}, {getPath(currNode)} \nTime: {round(time.time() - start_time, 6)} seconds\n'
+            # return f'Greedy Result: Visited Nodes: {len(visited)}, {getPath(currNode)} \nTime: {round(time.time() - start_time, 6)} seconds\n'
+            return getPath(currNode)
 
         edgeNodes = currNode.edgeNodes()
 
         for node in edgeNodes:
-            nodesToVisit.put((heuristic(node), node))
+            nodesToVisit.put((heuristic(node, board), node))
 
     return None
 
 
-def astar(initial, cond, heuristic):
+def astar(initial, cond, heuristic, board):
     start_time = time.time()
     
     nodesToVisit = PriorityQueue()
-    nodesToVisit.put((heuristic(initial), initial))
+    nodesToVisit.put((heuristic(initial, board), initial))
     visited = []
 
     while (not nodesToVisit.empty()):
@@ -155,12 +161,13 @@ def astar(initial, cond, heuristic):
         visited.append(currNode)
 
         if (cond(currNode)):
-            return f'AStar Result: Visited Nodes: {len(visited) + 1} , {getPath(currNode)} \nTime: {round(time.time() - start_time, 6)} seconds\n'
+            # return f'AStar Result: Visited Nodes: {len(visited) + 1} , {getPath(currNode)} \nTime: {round(time.time() - start_time, 6)} seconds\n'
+            return getPath(currNode)
 
         edgeNodes = currNode.edgeNodes(currNode.distance + 1)
 
         for node in edgeNodes:
-            heuristicNode = node.distance + heuristic(node)
+            heuristicNode = node.distance + heuristic(node, board)
             nodesToVisit.put((heuristicNode, node))
 
     return None

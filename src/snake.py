@@ -45,12 +45,13 @@ class SnakeNode:
             newPos = (y+1, x)
             
             visited_adjs = 0
+
             adjs = [(newPos[0]-1,newPos[1]), (newPos[0]+1,newPos[1]), (newPos[0],newPos[1]-1), (newPos[0],newPos[1]+1)]
             for pos in adjs:
                 if utils.insideBounds(pos, self.board):
                     if self.board[pos[0]][pos[1]] == 1:
                         visited_adjs += 1
-                        
+
             if visited_adjs <= 1: 
                 boardCopy = copy.deepcopy(self.board)           
                 boardCopy[y+1][x] = 1
@@ -63,10 +64,12 @@ class SnakeNode:
             
             visited_adjs = 0
             adjs = [(newPos[0]-1, newPos[1]), (newPos[0]+1,newPos[1]), (newPos[0],newPos[1]-1), (newPos[0],newPos[1]+1)]
+            
             for pos in adjs:
                 if utils.insideBounds(pos, self.board):
                     if self.board[pos[0]][pos[1]] == 1:
                         visited_adjs += 1
+
 
             if visited_adjs <= 1:   
                 boardCopy = copy.deepcopy(self.board)           
@@ -80,11 +83,14 @@ class SnakeNode:
             newPos = (y, x+1)
             
             adjs = [(newPos[0]-1,newPos[1]), (newPos[0]+1,newPos[1]), (newPos[0],newPos[1]-1), (newPos[0],newPos[1]+1)]
+            
             visited_adjs = 0
+
             for pos in adjs:
                 if utils.insideBounds(pos, self.board):
                     if self.board[pos[0]][pos[1]] == 1:
                         visited_adjs += 1
+
 
             if visited_adjs <= 1:   
                 boardCopy = copy.deepcopy(self.board)           
@@ -96,7 +102,9 @@ class SnakeNode:
             newPos = (y, x-1)
             
             adjs = [(newPos[0]-1,newPos[1]), (newPos[0]+1,newPos[1]), (newPos[0],newPos[1]-1), (newPos[0],newPos[1]+1)]
+            
             visited_adjs = 0
+            
             for pos in adjs:
                 if utils.insideBounds(pos, self.board):
                     if self.board[pos[0]][pos[1]] == 1:
@@ -112,24 +120,11 @@ class SnakeNode:
 def condition(node):
     return node.posY == 0 and (node.posX == len(node.board)-1) and chess.checkCaptures(node.board)
 
-def heuristics(node):
+def heuristics(node, board):
     pos = (node.posY, node.posX)
     d = utils.getDistance(pos, board)
     return chess.captureDiff(node.board) + d/4
 
-board = fileparser.fileParser("resources/level5.txt")
-s = SnakeNode(board)
 
 
-print(node_algorithms.dfs(s, condition))
-
-print(node_algorithms.bfs(s, condition))
-
-print(node_algorithms.it_deep(s, condition))
-
-print(node_algorithms.ucost(s, condition))
-
-print(node_algorithms.greedy(s, condition, heuristics))
-
-print(node_algorithms.astar(s, condition, heuristics))
 

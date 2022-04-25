@@ -28,7 +28,7 @@ class ChessBoard:
         self.size = len(board)
         self.draw(board)
         self.cur_pos = cur_pos
-    
+
     def setCurPos(self, pos):
         self.cur_pos = pos
 
@@ -49,9 +49,9 @@ class ChessBoard:
         screen.blit(surf, square.calculate_coordinates())
 
     def draw(self, board):
+        self.size = len(board)
         is_white = False
         self.chess_board = []
-
         for y in range(self.size):
             row = board[y]
             chess_row = []

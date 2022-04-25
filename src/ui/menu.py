@@ -3,9 +3,60 @@ from click import option
 import pygame
 from config import screen, screen_width, font, black, green, yellow, white, text_format, clock, FPS
 
-
-def menu_algorithms():
+def menu_level():
     pass
+
+def menu_algorithms(level):
+    menu = True
+    options = ["breadth first search", "depth first search", "uniform cost", "iterative deepening","greedy", "a star", "BACK TO MENU" ]
+    selected = "breadth first search"
+    idx_selected = 0
+
+    while menu:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    idx_selected -= 1
+                    if(idx_selected < 0): 
+                        idx_selected = len(options) - 1
+                    selected = options[idx_selected]
+                elif event.key == pygame.K_DOWN:
+                    idx_selected += 1
+                    if(idx_selected > len(options) - 1): 
+                        idx_selected = 0
+                    selected = options[idx_selected]
+                if event.key == pygame.K_RETURN:
+                    if selected in options:
+                        if selected == "BACK TO MENU":
+                            return None
+                        return (selected, level)
+                    
+    
+        # Main Menu UI
+        screen.fill(green)
+        title = text_format("Chess Snake Puzzle", font, 90, yellow)
+        size = 0
+        for opt in options:
+            size += 50
+            if selected == opt:
+                text_start = text_format(opt, font, 75, white)
+            else:
+                text_start = text_format(opt, font, 75, black)
+            start_rect = text_start.get_rect()
+            screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 150+size))
+
+        title_rect = title.get_rect()
+
+        # Main Menu Text
+        screen.blit(title, (screen_width/2 - (title_rect[2]/2), 80))
+        pygame.display.update()
+        clock.tick(FPS)
+        pygame.display.set_caption(
+            "Choose Player Menu")
+
 
 def menu_player(level):
 
@@ -23,18 +74,18 @@ def menu_player(level):
                 if event.key == pygame.K_UP:
                     idx_selected -= 1
                     if(idx_selected < 0): 
-                        idx_selected = 0
+                        idx_selected = len(options) - 1
                     selected = options[idx_selected]
                 elif event.key == pygame.K_DOWN:
                     idx_selected += 1
                     if(idx_selected > len(options) - 1): 
-                        idx_selected = len(options) - 1
+                        idx_selected = 0
                     selected = options[idx_selected]
                 if event.key == pygame.K_RETURN:
                     if selected == "player":
                         return ("player", level)
                     if selected == "computer":
-                        menu_algorithms()
+                        return menu_algorithms(level)
                     if selected == "go_back":
                         return None
     
@@ -72,6 +123,7 @@ def menu_player(level):
 def main_menu():
     level = 0
     menu = True
+    result = None
     options = ["play", "choose_level", "quit"]
     selected = "play"
     idx_selected = 0
@@ -85,22 +137,25 @@ def main_menu():
                 if event.key == pygame.K_UP:
                     idx_selected -= 1
                     if(idx_selected < 0): 
-                        idx_selected = 0
+                        idx_selected = len(options) - 1
                     selected = options[idx_selected]
                 elif event.key == pygame.K_DOWN:
                     idx_selected += 1
                     if(idx_selected > len(options) - 1): 
-                        idx_selected = len(options) - 1
+                        idx_selected = 0
                     selected = options[idx_selected]
                 if event.key == pygame.K_RETURN:
                     if selected == "play":
                         level = 1
-                        return menu_player(level)
+                        result = menu_player(level)
                     if selected == "choose_level":
-                        return("Choose Level")
+                        result = menu_level()
                     if selected == "quit":
                         pygame.quit()
                         quit()
+        
+        if result is not None:
+            return result
 
         # Main Menu UI
         screen.fill(green)
