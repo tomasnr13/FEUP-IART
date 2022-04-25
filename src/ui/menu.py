@@ -19,12 +19,12 @@ def menu_level():
                 if event.key == pygame.K_LEFT:
                     idx_selected -= 1
                     if(idx_selected < 0): 
-                        idx_selected = 0
+                        idx_selected = len(options) - 1
                     selected = options[idx_selected]
                 elif event.key == pygame.K_RIGHT:
                     idx_selected += 1
                     if(idx_selected > len(options) - 1): 
-                        idx_selected = len(options) - 1
+                        idx_selected = 0
                     selected = options[idx_selected]
                 if event.key == pygame.K_RETURN:
                     if selected in options:
@@ -35,7 +35,7 @@ def menu_level():
     
         # Main Menu UI
         screen.fill(green)
-        title = text_format("Chess Snake Puzzle", font, 90, yellow)
+        title = text_format("Level", font, 80, yellow)
 
         for opt in options:
             if selected == opt:
@@ -59,7 +59,7 @@ def menu_level():
         pygame.display.update()
         clock.tick(FPS)
         pygame.display.set_caption(
-            "Choose Player Menu")
+            "Chess Snake Puzzle")
 
     
 
@@ -94,7 +94,7 @@ def menu_algorithms(level):
     
         # Main Menu UI
         screen.fill(green)
-        title = text_format("Chess Snake Puzzle", font, 90, yellow)
+        title = text_format("Algorithm", font, 80, yellow)
         size = 0
         for opt in options:
             size += 50
@@ -112,7 +112,7 @@ def menu_algorithms(level):
         pygame.display.update()
         clock.tick(FPS)
         pygame.display.set_caption(
-            "Choose Player Menu")
+            "Chess Snake Puzzle")
 
 
 def menu_player(level):
@@ -148,7 +148,7 @@ def menu_player(level):
     
         # Main Menu UI
         screen.fill(green)
-        title = text_format("Chess Snake Puzzle", font, 90, yellow)
+        title = text_format("Mode", font, 80, yellow)
         if selected == "player":
             text_start = text_format("PLAYER", font, 75, white)
         else:
@@ -175,10 +175,9 @@ def menu_player(level):
         pygame.display.update()
         clock.tick(FPS)
         pygame.display.set_caption(
-            "Choose Player Menu")
+            "Chess Snake Puzzle")
 
-def main_menu():
-    level = 0
+def main_menu(level):
     menu = True
     result = None
     options = ["play", "choose_level", "quit"]
@@ -203,7 +202,7 @@ def main_menu():
                     selected = options[idx_selected]
                 if event.key == pygame.K_RETURN:
                     if selected == "play":
-                        level = 1
+                        level += 1
                         result = menu_player(level)
                     if selected == "choose_level":
                         result = menu_level()
@@ -216,7 +215,7 @@ def main_menu():
 
         # Main Menu UI
         screen.fill(green)
-        title = text_format("Chess Snake Puzzle", font, 90, yellow)
+        title = text_format("Chess Snake Puzzle", font, 80, yellow)
         if selected == "play":
             text_start = text_format("PLAY", font, 75, white)
         else:
@@ -243,5 +242,5 @@ def main_menu():
         pygame.display.update()
         clock.tick(FPS)
         pygame.display.set_caption(
-            "Main Menu")
+            "Chess Snake Puzzle")
 

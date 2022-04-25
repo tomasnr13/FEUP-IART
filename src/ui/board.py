@@ -1,6 +1,6 @@
 import pygame
 import snakeDraw
-from config import screen, screen_width, white, black, little_green, green
+from config import screen, screen_width, white, black, gray, green
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..', 'src'))
 import chess
@@ -52,7 +52,6 @@ class ChessBoard:
         self.size = len(board)
         is_white = False
         self.chess_board = []
-        print(self.size, 'size')
         for y in range(self.size):
             if(self.size % 2 == 0):
                 is_white = not is_white

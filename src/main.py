@@ -100,55 +100,62 @@ def askForHint(position, path, board):
 
 
 def game():
-    #level = int(input("Choose level: "))
-    #board = resetBoard(size)
-    (mode, level) = main_menu()
-
-    initialboard = getBoard(str(level))
-    board = copy.deepcopy(initialboard)
+    level = 0
     game_over = 0
-    validMove = False
+    while True:
 
-    position = (len(board) - 1, 0)
-    visited = [position]
+        if(game_over != 2 and game_over != 1):
+            (mode, level) = main_menu(level)
 
-    if mode == "player":
+        if game_over == 1 and mode == "player":
+            level += int(level) + 1
 
-        while not game_over:
-            while not validMove:
-                move = game_obj.getMove()
-                if move:
-                    newpos = doMove(move,position)
-                    validMove = utils.validPos(board, newpos, visited)
-                    # print(move, '<- move, validMove ->', validMove)
-                #move is none when nothing is pressed, false if "x" option or esc is pressed
-                if move == False:
-                    return 0
-            if validMove:
-                validMove = False
-                position = newpos
-                board[position[0]][position[1]] = 1
-                visited.append(newpos)
+        initialboard = getBoard(str(level))
+        board = copy.deepcopy(initialboard)
+        game_over = 0
+        validMove = False
 
-            game_obj.board.update(board, newpos)
+        position = (len(board) - 1, 0)
+        visited = [position]
 
-            game_over = gameOver(board)
+        if mode == "player":
 
-        if game_over == 1:
-            print('You won!')
-            return 0
-        elif game_over == 2:
-            print('Try again!')
-            board = copy.deepcopy(initialboard)
-            position = (len(board) - 1, 0)
-            visited = [position]
-    
-    else:
-        path = runAlgorithm(board, mode)
-        bot = ui.bot.Bot(path, board)
-        bot.drawPath()
+            while not game_over:
+                while not validMove:
+                    move = game_obj.getMove(False)
+                    if move:
+                        newpos = doMove(move,position)
+                        validMove = utils.validPos(board, newpos, visited)
+                        # print(move, '<- move, validMove ->', validMove)
+                    #move is none when nothing is pressed, false if "x" option or esc is pressed
+                    if move == False:
+                        return 0
+                if validMove:
+                    validMove = False
+                    position = newpos
+                    board[position[0]][position[1]] = 1
+                    visited.append(newpos)
 
-    return 0
+                game_obj.board.update(board, newpos)
+
+                game_over = gameOver(board)
+
+            if game_over == 1:
+                print('You won!')
+                
+            elif game_over == 2:
+                print('Try again!')
+                board = copy.deepcopy(initialboard)
+                position = (len(board) - 1, 0)
+                visited = [position]
+        
+        else:
+            path = runAlgorithm(board, mode)
+            bot = ui.bot.Bot(path, board)
+            while not game_obj.getMove(True):
+                bot.drawPath()
+
+
 
 if __name__ == "__main__":
     game()
