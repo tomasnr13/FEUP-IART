@@ -7,10 +7,10 @@ import chess
 import chessPiece
 
 class BoardSquare:
-    def __init__(self, x, y, is_white, value):
+    def __init__(self, x, y, is_white, value, board_size):
         self.x = x
         self.y = y
-        self.width_height = screen_width / 6
+        self.width_height = screen_width / board_size
         self.is_white = is_white
         self.value = value
 
@@ -61,7 +61,7 @@ class ChessBoard:
             # if the number of squares per row is even, it's necessary to change the color at the beginning of each row
             
             for x in range(self.size):
-                chess_row.append(BoardSquare(x, y, is_white, row[x]))
+                chess_row.append(BoardSquare(x, y, is_white, row[x], self.size))
                 is_white = not is_white
             self.chess_board.append(chess_row)
 
@@ -69,9 +69,9 @@ class ChessBoard:
             for square in row:
                 self.paint(square)
 
-                # if(square.value == 1):
-                #     snake = snakeDraw.Snake(square)
-                #     snake.paintSnake()
+                if(square.value == 1):
+                    snake = snakeDraw.Snake(square)
+                    snake.paintSnake()
 
                 if (isinstance(square.value, chess.ChessPiece)):
                     piece = None
