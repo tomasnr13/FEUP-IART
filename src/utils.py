@@ -25,3 +25,18 @@ def validPos(board, newpos, visited):
         return False
 
     return True
+
+
+def printBoard(board):
+    a = []
+    for y in range(len(board)):
+        line = []
+        for x in range(len(board)):
+            if isinstance(board[y][x], ChessPiece):
+                line += board[y][x].letter
+            else:
+                line += [board[y][x]]
+        a += [line]
+        
+    for line in a:
+        print(line)
