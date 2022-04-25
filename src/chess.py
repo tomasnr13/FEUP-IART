@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-#import main
-#import fileparser
 
 class ChessPiece(ABC):
+    letter = ''
+
     @abstractmethod
     def possibleCaptures(self):
         pass
@@ -43,7 +43,7 @@ class ChessPiece(ABC):
             else:
                 break
             
-        for x in range(min(col+1, size-1), size): #len(board[line])
+        for x in range(min(col+1, size-1), size): #len(board[line])            
             if board[line][x] == place:
                 positions += [[line, x]]
             elif board[line][x] == 0:
@@ -93,6 +93,7 @@ class ChessPiece(ABC):
 
 
 class Tower(ChessPiece):
+    letter = 'T'
     
     def possibleCaptures(self, board, line, col, place=0):
         positions = []
@@ -118,7 +119,7 @@ class Tower(ChessPiece):
         for y in range(max(line-1, 0), -1, -1):
             if board[y][col] == place:
                 positions += [[y, col]]
-            elif board[line][x] == 0:
+            elif board[y][col] == 0:
                 continue
             else:
                 break
@@ -126,7 +127,7 @@ class Tower(ChessPiece):
         for y in range(min(line+1, size-1), size):
             if board[y][col] == place:
                 positions += [[y, col]]
-            elif board[line][x] == 0:
+            elif board[y][col] == 0:
                 continue
             else:
                 break
@@ -135,6 +136,8 @@ class Tower(ChessPiece):
 
     
 class Horse(ChessPiece):
+    letter = 'H'
+
     def possibleCaptures(self, board, line, col, place=0):
         positions = []
         size = len(board)
@@ -173,11 +176,13 @@ class Horse(ChessPiece):
         return sorted(positions)
 
 class Bishop(ChessPiece):
+    letter = 'B'
     
     def possibleCaptures(self, board, line, col, place=0):
         return super().obliqueCaptures(board, line, col, place)
 
 class Queen(ChessPiece):
+    letter = 'Q'
     
     def possibleCaptures(self, board, line, col, place=0):
         positions = super().obliqueCaptures(board, line, col, place)
@@ -186,7 +191,7 @@ class Queen(ChessPiece):
         return sorted(positions)
 
 class King(ChessPiece):
-    
+    letter = 'K'
     def possibleCaptures(self, board, line, col, place=0):
         size = len(board)
         positions = []
@@ -205,20 +210,30 @@ class King(ChessPiece):
         return sorted(positions)
 
 
-# def drawBoard(board):
-#     for line in board:
-#         print(line)
-#     return
 
-# def defaultBoard():
-#     board = fileparser.fileParser("resources/level1.txt")
-#     drawBoard(board)
-#     return board
+def checkCaptures(board): # returns True if number of captures match among all chess pieces
+    countCaptures = -1
+    for y in range(len(board)):
+        for x in range(len(board)):
+            if isinstance(board[y][x], ChessPiece):
+                elemCaptures = len(board[y][x].currentCaptures(board, y, x))
+                if countCaptures == -1:
+                    countCaptures = elemCaptures
+                elif countCaptures != elemCaptures:
+                    return False
 
-# board = defaultBoard()
-# board = main.defaultBoard()
+    return True
 
-# king = King()
-# print("Possible Captures: ", King.possibleCaptures(King, board, 1, 3))
-# print("Current Captures: ", King.currentCaptures(type(king), board, 1, 3))
+
+def captureDiff(board): # returns highest difference betwwen piece captures
+    captures = {}
+    for y in range(len(board)):
+        for x in range(len(board)):
+            if isinstance(board[y][x], ChessPiece):
+                captures[(y, x)] = len(board[y][x].currentCaptures(board, y, x))
+    return max(captures.values()) - min(captures.values())
+
+
+
+
 

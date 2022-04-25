@@ -30,4 +30,3 @@ def fileParser(filename):
     return board
 
 
-#print(fileParser("resources/level1.txt"))
