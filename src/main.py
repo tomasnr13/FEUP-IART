@@ -1,5 +1,6 @@
 import chess, utils
 import fileparser
+import copy
 from ui import draw, getMove
 
 def resetBoard(size):
@@ -47,6 +48,32 @@ def gameOver(board):
     else:
         return 2
 
+def askForHint(position, path, board):
+    neq = False
+    if not chess.checkCaptures(board):
+        neq = True
+        print("The number of attacks doesnt match!")
+    
+    newboard = copy.deepcopy(board)
+
+    for idx in range(len(path)):
+        if path[idx] == position:
+            nextpos=path[idx+1]
+            if nextpos == (position[0]+1,position[1]):
+                print("Move down")
+            elif nextpos == (position[0]-1,position[1]):
+                print("up")
+            elif nextpos == (position[0],position[1]+1):
+                print("right")
+            elif nextpos == (position[0],position[1]-1):
+                print("left")
+            if neq:
+                newboard[nextpos[0]][nextpos[1]] = 1
+                if chess.checkCaptures(newboard):
+                    print("This move can balance the number of attacks!")
+            return
+    print("You might want to redo your path")
+
 
 def game():
     #level = int(input("Choose level: "))
@@ -54,15 +81,13 @@ def game():
     
     initialboard = defaultBoard()
 
-    board = initialboard[:]
+    board = copy.deepcopy(initialboard)
     game_over = 0
     validMove = False
 
     position = (len(board) - 1, 0)
     visited = [position]
-
     while game_over != 1:
-
         while not validMove:
             move = getMove()
             if move:
@@ -73,11 +98,12 @@ def game():
             if move == False:
                 return 0
 
-        validMove = False
-        position = newpos
-        board[position[0]][position[1]] = 1
-        visited.append(newpos)
+        if validMove:
+            position = newpos
+            board[position[0]][position[1]] = 1
+            visited.append(newpos)
 
+        validMove = False
         draw(board, newpos)
 
         game_over = gameOver(board)
@@ -87,7 +113,7 @@ def game():
             return 0
         elif game_over == 2:
             print('Try again!')
-            board=initialboard[:]
+            board = copy.deepcopy(initialboard)
             position = (len(board) - 1, 0)
             visited = [position]
     
