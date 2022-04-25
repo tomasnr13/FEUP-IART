@@ -10,7 +10,7 @@ class BoardSquare:
     def __init__(self, x, y, is_white, value):
         self.x = x
         self.y = y
-        self.width_height = screen_width / 5
+        self.width_height = screen_width / 6
         self.is_white = is_white
         self.value = value
 
@@ -52,12 +52,14 @@ class ChessBoard:
         self.size = len(board)
         is_white = False
         self.chess_board = []
+        print(self.size, 'size')
         for y in range(self.size):
+            if(self.size % 2 == 0):
+                is_white = not is_white
             row = board[y]
             chess_row = []
             # if the number of squares per row is even, it's necessary to change the color at the beginning of each row
-            if(self.size // 2 == 0):
-                is_white = not is_white
+            
             for x in range(self.size):
                 chess_row.append(BoardSquare(x, y, is_white, row[x]))
                 is_white = not is_white
@@ -67,9 +69,9 @@ class ChessBoard:
             for square in row:
                 self.paint(square)
 
-                if(square.value == 1):
-                    snake = snakeDraw.Snake(square)
-                    snake.paintSnake()
+                # if(square.value == 1):
+                #     snake = snakeDraw.Snake(square)
+                #     snake.paintSnake()
 
                 if (isinstance(square.value, chess.ChessPiece)):
                     piece = None
@@ -81,6 +83,8 @@ class ChessBoard:
                         piece = chessPiece.King(square)
                     elif (isinstance(square.value, chess.Queen)):
                         piece = chessPiece.Queen(square)
+                    elif (isinstance(square.value, chess.Bishop)):
+                        piece = chessPiece.Bishop(square)
                     piece.displayPiece()    
 
                 pygame.display.flip()

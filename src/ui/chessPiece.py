@@ -29,7 +29,7 @@ class Hourse(ChessPiece):
         self.setImage()
 
     def setImage(self):
-        self.image = r'images/hoursePiece.png'
+        self.image = r'images/horsePiece.png'
 
 class Bishop(ChessPiece):
     def __init__(self, square):

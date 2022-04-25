@@ -1,10 +1,67 @@
 from json.tool import main
 from click import option
+from os import path
 import pygame
 from config import screen, screen_width, font, black, green, yellow, white, text_format, clock, FPS
 
 def menu_level():
-    pass
+    menu = True
+    options = ["1","2","3","4","5","6","7", "BACK TO MENU"]
+    selected = "1"
+    idx_selected = 0
+
+    while menu:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    idx_selected -= 1
+                    if(idx_selected < 0): 
+                        idx_selected = 0
+                    selected = options[idx_selected]
+                elif event.key == pygame.K_RIGHT:
+                    idx_selected += 1
+                    if(idx_selected > len(options) - 1): 
+                        idx_selected = len(options) - 1
+                    selected = options[idx_selected]
+                if event.key == pygame.K_RETURN:
+                    if selected in options:
+                        if selected == "BACK TO MENU":
+                            return None
+                        return menu_player(selected)
+                    
+    
+        # Main Menu UI
+        screen.fill(green)
+        title = text_format("Chess Snake Puzzle", font, 90, yellow)
+
+        for opt in options:
+            if selected == opt:
+                text_start = text_format(opt, font, 75, white)
+                start_rect = text_start.get_rect()
+                screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 200))
+
+                if opt != "BACK TO MENU":
+                    file = path.join('images', 'imgLevel'+opt+'.png')
+                    image = pygame.image.load(file)
+                    image = pygame.transform.scale(image, (300,300))
+                    screen.blit(image, (screen_width/3 - (start_rect[2]), 250))
+                
+        
+
+        title_rect = title.get_rect()
+
+        # Main Menu Text
+        screen.blit(title, (screen_width/2 - (title_rect[2]/2), 80))
+
+        pygame.display.update()
+        clock.tick(FPS)
+        pygame.display.set_caption(
+            "Choose Player Menu")
+
+    
 
 def menu_algorithms(level):
     menu = True
