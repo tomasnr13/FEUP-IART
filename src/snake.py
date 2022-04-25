@@ -117,7 +117,7 @@ def heuristics(node):
     d = utils.getDistance(pos, board)
     return chess.captureDiff(node.board) + d/4
 
-board = fileparser.fileParser("resources/level1.txt")
+board = fileparser.fileParser("resources/level5.txt")
 s = SnakeNode(board)
 
 
@@ -133,10 +133,3 @@ print(node_algorithms.greedy(s, condition, heuristics))
 
 print(node_algorithms.astar(s, condition, heuristics))
 
-
-
-# level 5 - two solutions?
-# astar
-# [(5, 0), (5, 1), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5), (3, 5), (2, 5), (2, 4), (2, 3), (2, 2), (1, 2), (0, 2), (0, 3), (0, 4), (0, 5)] 
-# dfs, bfs, dls, ucost, greedy
-# [(5, 0), (5, 1), (4, 1), (3, 1), (3, 0), (2, 0), (1, 0), (0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 3), (2, 4), (2, 5), (1, 5), (0, 5)]
