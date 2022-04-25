@@ -1,5 +1,4 @@
 from queue import PriorityQueue
-
 import utils
 
 def getPath(node):
@@ -41,7 +40,8 @@ def bfs(initial, condition):
 #depth first search
 def dfs(node, condition, visited=[]):
 
-    if (not node or node in visited): return None
+    if (not node or node in visited):
+        return None
     if (condition(node)):
         return f'DFS Result: \n{getPath(node)}\nVisited {len(visited) + 1} nodes:\n{visited + [node]}\n'
 
@@ -99,7 +99,7 @@ def ucost(initial, condition):
         visited.append(currentNode)
 
         if (condition(currentNode)):
-            return f'UCost Result: {getPath(node)}\n Visited Nodes: {len(visited) + 1} \n'
+            return f'UCost Result: {getPath(currentNode)}\n Visited Nodes: {len(visited) + 1} \n'
 
         edgeNodes = currentNode.edgeNodes(currentNode.distance + 1)
 

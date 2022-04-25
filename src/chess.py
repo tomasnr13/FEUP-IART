@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+# from curses.ascii import isdigit
 
 class ChessPiece(ABC):
     letter = ''
@@ -10,7 +11,7 @@ class ChessPiece(ABC):
     def currentCaptures(self, board, line, col):
         return self.possibleCaptures(board, line, col, 1)
     
-    def horizontalCaptures(board, line, col, place):
+    def horizontalCaptures(self, board, line, col, place):
         positions = []
         size = len(board)
         
@@ -31,7 +32,7 @@ class ChessPiece(ABC):
                 break
         return positions
     
-    def verticalCaptures(board, line, col, place):
+    def verticalCaptures(self, board, line, col, place):
         positions = []
         size = len(board)
         
@@ -53,39 +54,47 @@ class ChessPiece(ABC):
             
         return sorted(positions)
     
-    def obliqueCaptures(board, line, col, place):
+    def obliqueCaptures(self, board, line, col, place):
         positions = []
         size = len(board)
           
         x = col
         for y in range(min(line+1, size-1), size):
             x += 1
-            if x > size-1 or board[y][x] != place: 
+            if x > size-1 or isinstance(board[y][x], ChessPiece): 
                 break
+            elif board[y][x] != place:
+                continue
             else:
                 positions += [[y, x]]
             
         x = col
         for y in range(min(line+1, size-1), size):
             x -= 1
-            if x < 0 or board[y][x] != place: 
+            if x < 0 or isinstance(board[y][x], ChessPiece): 
                 break
+            elif board[y][x] != place:
+                continue
             else:
                 positions += [[y, x]]
             
         x = col
         for y in range(max(line-1, 0), -1, -1):
             x += 1
-            if x > size-1 or board[y][x] != place: 
+            if x > size-1 or isinstance(board[y][x], ChessPiece): 
                 break
+            elif board[y][x] != place:
+                continue
             else:
                 positions += [[y, x]]
             
         x = col
         for y in range(max(line-1, 0), -1, -1):
             x -= 1
-            if x < 0 or board[y][x] != place: 
+            if x < 0 or isinstance(board[y][x], ChessPiece): 
                 break
+            elif board[y][x] != place:
+                continue
             else:
                 positions += [[y, x]]
         
@@ -96,42 +105,8 @@ class Tower(ChessPiece):
     letter = 'T'
     
     def possibleCaptures(self, board, line, col, place=0):
-        positions = []
-        
-        size = len(board)
-        
-        for x in range(max(col-1, 0), -1, -1):
-            if board[line][x] == place:
-                positions += [[line, x]]
-            elif board[line][x] == 0:
-                continue
-            else:
-                break
-            
-        for x in range(min(col+1, size-1), size): #len(board[line])
-            if board[line][x] == place:
-                positions += [[line, x]]
-            elif board[line][x] == 0:
-                continue
-            else:
-                break
-        
-        for y in range(max(line-1, 0), -1, -1):
-            if board[y][col] == place:
-                positions += [[y, col]]
-            elif board[y][col] == 0:
-                continue
-            else:
-                break
-            
-        for y in range(min(line+1, size-1), size):
-            if board[y][col] == place:
-                positions += [[y, col]]
-            elif board[y][col] == 0:
-                continue
-            else:
-                break
-        
+        positions = super().verticalCaptures(board, line, col, place)
+        positions += super().horizontalCaptures(board, line, col, place)
         return sorted(positions)
 
     
@@ -235,5 +210,57 @@ def captureDiff(board): # returns highest difference betwwen piece captures
 
 
 
+# Test functions
+# def printBoard(board):
+#     a = []
+#     for y in range(len(board)):
+#         line = []
+#         for x in range(len(board)):
+#             if isinstance(board[y][x], ChessPiece):
+#                 line += board[y][x].letter
+#             else:
+#                 line += [board[y][x]]
+#         a += [line]
+        
+#     for line in a:
+#         print(line)
+
+# def fileParser(filename):
+#     f = open(filename, "r")
+
+#     board = []
+#     size = int(f.readline())
+    
+#     for _ in range(size):
+#         line = f.readline()
+#         line = line.split()
+#         for x in range(size):
+#             elem = line[x]
+#             if isdigit(elem):
+#                 line[x] = int(elem)
+#             else:
+#                 if elem == 'T':
+#                     line[x] = Tower()
+#                 elif elem == 'H':
+#                     line[x] = Horse()
+#                 elif elem == 'B':
+#                     line[x] = Bishop()
+#                 elif elem == 'Q':
+#                     line[x] = Queen()
+#                 else:
+#                     line[x] = King()
+#         board += [line]
+    
+#     return board
 
 
+
+
+# iboard = fileParser("resources/level2.txt")
+# fboard = fileParser("resources/level2_complete.txt") 
+# B = Bishop
+
+# print('Bishop initial captures: ', B.possibleCaptures(Bishop, iboard, 1, 2))
+# printBoard(fboard)
+# print('Bishop final captures: ', B.currentCaptures(Bishop, fboard, 1, 2))
+# printBoard(fboard)
