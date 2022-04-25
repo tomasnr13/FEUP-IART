@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-# from curses.ascii import isdigit
 
 class ChessPiece(ABC):
     letter = ''
@@ -209,58 +208,3 @@ def captureDiff(board): # returns highest difference betwwen piece captures
     return max(captures.values()) - min(captures.values())
 
 
-
-# Test functions
-# def printBoard(board):
-#     a = []
-#     for y in range(len(board)):
-#         line = []
-#         for x in range(len(board)):
-#             if isinstance(board[y][x], ChessPiece):
-#                 line += board[y][x].letter
-#             else:
-#                 line += [board[y][x]]
-#         a += [line]
-        
-#     for line in a:
-#         print(line)
-
-# def fileParser(filename):
-#     f = open(filename, "r")
-
-#     board = []
-#     size = int(f.readline())
-    
-#     for _ in range(size):
-#         line = f.readline()
-#         line = line.split()
-#         for x in range(size):
-#             elem = line[x]
-#             if isdigit(elem):
-#                 line[x] = int(elem)
-#             else:
-#                 if elem == 'T':
-#                     line[x] = Tower()
-#                 elif elem == 'H':
-#                     line[x] = Horse()
-#                 elif elem == 'B':
-#                     line[x] = Bishop()
-#                 elif elem == 'Q':
-#                     line[x] = Queen()
-#                 else:
-#                     line[x] = King()
-#         board += [line]
-    
-#     return board
-
-
-
-
-# iboard = fileParser("resources/level2.txt")
-# fboard = fileParser("resources/level2_complete.txt") 
-# B = Bishop
-
-# print('Bishop initial captures: ', B.possibleCaptures(Bishop, iboard, 1, 2))
-# printBoard(fboard)
-# print('Bishop final captures: ', B.currentCaptures(Bishop, fboard, 1, 2))
-# printBoard(fboard)
