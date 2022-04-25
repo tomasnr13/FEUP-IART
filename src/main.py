@@ -56,8 +56,10 @@ def doMove(move,position):
         newpos = (position[0]+1,position[1])
     elif move == "left":
         newpos = (position[0],position[1]-1)
-    else :
+    elif move == "right" :
         newpos = (position[0],position[1]+1)
+    else: 
+        return None
     return newpos
 
 
@@ -124,21 +126,31 @@ def game():
                 while not validMove:
                     move = game_obj.getMove(False)
                     if move:
+                        if move == "restart":
+                            game_over = 2
+                            break
+
+                        if move == "back":
+                            game_over = 3
+                            break
+
                         newpos = doMove(move,position)
                         validMove = utils.validPos(board, newpos, visited)
-                        # print(move, '<- move, validMove ->', validMove)
+                        
                     #move is none when nothing is pressed, false if "x" option or esc is pressed
                     if move == False:
-                        return 0
-                if validMove:
-                    validMove = False
-                    position = newpos
-                    board[position[0]][position[1]] = 1
-                    visited.append(newpos)
+                        break
 
-                game_obj.board.update(board, newpos)
+                if(game_over != 2 and game_over != 3):
+                    if validMove:
+                        validMove = False
+                        position = newpos
+                        board[position[0]][position[1]] = 1
+                        visited.append(newpos)
 
-                game_over = gameOver(board)
+                    game_obj.board.update(board, newpos)
+
+                    game_over = gameOver(board)
 
             if game_over == 1:
                 print('You won!')

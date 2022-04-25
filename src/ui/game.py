@@ -22,8 +22,15 @@ class Game:
     def getMove(self, ret_value):
         for event in pygame.event.get():
             if event.type == KEYDOWN:
+                print(event.key, 'key')
                 if(ret_value):
                     return True
+                
+                if(event.key == 114 ):
+                    return('restart')
+                
+                if(event.key == 101):
+                    return('back')
 
                 if event.key == K_UP:
                     return('up')
@@ -40,6 +47,8 @@ class Game:
             
                 if event.key == K_ESCAPE:
                     return False
+                
+                
 
             elif event.type == QUIT :
                 return False
