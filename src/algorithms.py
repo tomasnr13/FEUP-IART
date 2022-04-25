@@ -163,10 +163,4 @@ def evalFunction(position, currpath, board):
 #def astar()
 
 board = main.defaultBoard()
-#print(dfs(board,(4,0),[]))
-print(board)
-newboard=board[:]
-newboard[0][0]=7
-print(board)
-print(newboard)
-#print(utils.validPos(board,(2,0),[(4,0),(3,0)])) 
+print(bfs(board,(4,0),[]))
