@@ -1,7 +1,13 @@
+from json.tool import main
 import chess, utils
 import fileparser
+import sys, os
 import copy
-from ui import draw, getMove
+sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'ui'))
+from ui.menu import main_menu
+from ui.game import Game
+
+game_obj = Game()
 
 def resetBoard(size):
 
@@ -14,14 +20,15 @@ def resetBoard(size):
     
     return board
 
-def defaultBoard():
-    board = fileparser.fileParser("resources/level1.txt")
-    board[len(board)-1][0] = 1
-    drawBoard(board)
+def getBoard(level):
+    board = fileparser.fileParser("resources/level"+level+".txt")
+    pos = (len(board)-1, 0)
+    board[pos[0]][pos[1]] = 1
+    drawBoard(board, pos)
     return board
 
-def drawBoard(board):
-    draw(board, (len(board)-1, 0))
+def drawBoard(board, pos):
+    game_obj.board.update(board, pos)
 
 
 def doMove(move,position):
@@ -78,33 +85,35 @@ def askForHint(position, path, board):
 def game():
     #level = int(input("Choose level: "))
     #board = resetBoard(size)
-    
-    initialboard = defaultBoard()
+    (mode, level) = main_menu()
 
+    initialboard = getBoard(str(level))
     board = copy.deepcopy(initialboard)
     game_over = 0
     validMove = False
 
     position = (len(board) - 1, 0)
     visited = [position]
-    while game_over != 1:
-        while not validMove:
-            move = getMove()
-            if move:
-                newpos = doMove(move,position)
-                validMove = utils.validPos(board, newpos, visited)
-                print(move, '<- move, validMove ->', validMove)
-            #move is none when nothing is pressed, false if "x" option or esc is pressed
-            if move == False:
-                return 0
 
-        if validMove:
-            position = newpos
-            board[position[0]][position[1]] = 1
-            visited.append(newpos)
+    while not game_over:
 
-        validMove = False
-        draw(board, newpos)
+        if mode == "player":
+            while not validMove:
+                move = game_obj.getMove()
+                if move:
+                    newpos = doMove(move,position)
+                    validMove = utils.validPos(board, newpos, visited)
+                    print(move, '<- move, validMove ->', validMove)
+                #move is none when nothing is pressed, false if "x" option or esc is pressed
+                if move == False:
+                    return 0
+            if validMove:
+                validMove = False
+                position = newpos
+                board[position[0]][position[1]] = 1
+                visited.append(newpos)
+
+        game_obj.board.update(board, newpos)
 
         game_over = gameOver(board)
 
