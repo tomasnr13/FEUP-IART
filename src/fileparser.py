@@ -1,5 +1,7 @@
 from curses.ascii import isdigit
+
 import chess
+
 
 def fileParser(filename):
     f = open(filename, "r")

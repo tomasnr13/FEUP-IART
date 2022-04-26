@@ -8,8 +8,10 @@ Operators: (checkBounds) up -> (y, x) => (y-1, x)
 All operators have a cost of 1.
 Objective State: (0, len(board)-1)
 """
-import chess, fileparser, utils, node_algorithms
 import copy
+
+import chess, utils
+
 
 class SnakeNode:
 

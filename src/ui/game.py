@@ -1,4 +1,3 @@
-from operator import truediv
 import pygame
 from config import K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_UP, KEYDOWN, QUIT
 import board

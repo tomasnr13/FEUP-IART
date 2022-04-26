@@ -1,5 +1,3 @@
-from json.tool import main
-from click import option
 from os import path
 import pygame
 from config import screen, screen_width, font, black, green, yellow, white, text_format, clock, FPS

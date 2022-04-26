@@ -1,13 +1,12 @@
-import chess, utils
-import fileparser
-import sys, os
 import copy
+
+import fileparser, node_algorithms, snake, chess, utils
+import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'ui'))
-from ui.menu import main_menu
-from ui.game import Game
-import node_algorithms
-import snake
 import ui.bot
+from ui.game import Game
+from ui.menu import main_menu
+
 
 game_obj = Game()
 

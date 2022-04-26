@@ -1,4 +1,3 @@
-import pygame
 from board import ChessBoard
 import time
 

@@ -1,10 +1,10 @@
-import pygame
+import pygame, sys, os
+from config import screen, screen_width, white, black
+
 import snakeDraw
-from config import screen, screen_width, white, black, gray, green
-import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..', 'src'))
-import chess
-import chessPiece
+import chess, chessPiece
+
 
 class BoardSquare:
     def __init__(self, x, y, is_white, value, board_size):

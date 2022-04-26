@@ -1,5 +1,4 @@
-import pygame
-import os
+import pygame, os
 from pygame.locals import (
     K_UP,
     K_LEFT,

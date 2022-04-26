@@ -1,6 +1,5 @@
 from queue import PriorityQueue
 import time
-from webbrowser import get
 
 
 def getPath(node):
