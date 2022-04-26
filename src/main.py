@@ -1,4 +1,3 @@
-from json.tool import main
 import chess, utils
 import fileparser
 import sys, os
@@ -102,7 +101,7 @@ def askForHint(position, path, board):
 
 
 def game():
-    level = 0
+    level = 1
     game_over = 0
     while True:
 
@@ -110,7 +109,7 @@ def game():
             (mode, level) = main_menu(level)
 
         if game_over == 1 and mode == "player":
-            level += int(level) + 1
+            level = int(level) + 1
 
         initialboard = getBoard(str(level))
         board = copy.deepcopy(initialboard)

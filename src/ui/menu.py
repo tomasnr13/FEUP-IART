@@ -112,7 +112,7 @@ def menu_algorithms(level):
         pygame.display.update()
         clock.tick(FPS)
         pygame.display.set_caption(
-            "Chess Snake Puzzle")
+            "Chess Snake Puzzle - level " + str(level))
 
 
 def menu_player(level):
@@ -175,7 +175,7 @@ def menu_player(level):
         pygame.display.update()
         clock.tick(FPS)
         pygame.display.set_caption(
-            "Chess Snake Puzzle")
+            "Chess Snake Puzzle - level " + str(level) )
 
 def main_menu(level):
     menu = True
@@ -202,7 +202,6 @@ def main_menu(level):
                     selected = options[idx_selected]
                 if event.key == pygame.K_RETURN:
                     if selected == "play":
-                        level += 1
                         result = menu_player(level)
                     if selected == "choose_level":
                         result = menu_level()
