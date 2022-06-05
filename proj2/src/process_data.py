@@ -6,8 +6,14 @@ import numpy as np
 import re
 import tqdm
 import unicodedata
+import matplotlib.pyplot as plt
+
 
 from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing import sequence
+
+from sklearn.preprocessing import LabelEncoder
+
 # Pre-Processing Function
 
 def strip_html_tags(text):
@@ -87,3 +93,38 @@ t.word_index['<PAD>'] = 0
 X_train = t.texts_to_sequences(X_train)
 X_test = t.texts_to_sequences(X_test)
 X_val = t.texts_to_sequences(X_val)
+
+# Calculating the Vocabulary Size and the number of Reviews
+
+print("Vocabulary size={}".format(len(t.word_index)))
+print("Number of Reviews={}".format(t.document_count))
+
+
+# Plotting the size of the sequences
+
+
+train_lens = [len(s) for s in X_train]
+test_lens = [len(s) for s in X_test]
+
+fig, ax = plt.subplots(1,2, figsize=(12, 6))
+h1 = ax[0].hist(train_lens)
+h2 = ax[1].hist(test_lens)
+
+
+# Padding the dataset to a maximum review length in words
+
+MAX_SEQUENCE_LENGTH = 220
+
+X_train = sequence.pad_sequences(X_train, maxlen=MAX_SEQUENCE_LENGTH)
+X_test = sequence.pad_sequences(X_test, maxlen=MAX_SEQUENCE_LENGTH)
+X_val = sequence.pad_sequences(X_val, maxlen=MAX_SEQUENCE_LENGTH)
+
+
+# Encoding Labels
+
+le = LabelEncoder()
+num_classes=5 # Very Bad -> -2, Bad -> -1, Neutral -> 0 , Good -> 1, Very Good -> 2
+
+y_train = le.fit_transform(y_train)
+y_test = le.transform(y_test)
+y_val = le.transform(y_val)
