@@ -1,6 +1,7 @@
 import algorithms
 import eval_performance
 import data_process
+import time
 
 import pandas as pd
 
@@ -37,6 +38,7 @@ if __name__ == "__main__":
     # print("\nLabel distribution in the test set:")
     # print(y_test.value_counts())
 
+    start_time = time.time()
     if(algorithm == 1):
         ## Naive Bayes
         print("\n-------------------------")
@@ -68,5 +70,5 @@ if __name__ == "__main__":
 
         print("  Performance:")
         eval_performance.evaluatePerformance(y_test, y_pred)
-
+    print(f'Time: {round(time.time() - start_time, 6)} seconds')
   
