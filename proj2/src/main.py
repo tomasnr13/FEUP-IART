@@ -1,3 +1,4 @@
+from bs4 import SoupStrainer
 import pandas as pd
 import re
 import nltk
@@ -19,11 +20,6 @@ from sklearn.metrics import f1_score
 import time
 
 
-train = pd.read_csv("./resources/train.csv")
-#test = pd.read_csv("./resources/test.csv")
-tokens=[]
-corpus=[]
-
 #cleaning and tokenizing 
 def pre_process():
     tokens=[]
@@ -32,24 +28,24 @@ def pre_process():
         title = re.sub('[^a-zA-Z]', ' ', train['review_title'][i])
         review = re.sub('[^a-zA-Z]', ' ', train['review_text'][i])
         #all words to lower
-        title=title.lower
-        review = review.lower
-        #remove stop words
+        title=title.lower()
+        review = review.lower()
+        #remove stop words and one letter words
         titlearr = []
-        for word in title.split:
-            if word not in stopwords.words('english'):
+        for word in title.split():
+            if word not in stopwords.words('english') and len(word)>1:
                 titlearr.append(word)
         reviewarr = []
-        for word in review.split:
-            if word not in stopwords.words('english'):
+        for word in review.split():
+            if word not in stopwords.words('english') and len(word)>1:
                 reviewarr.append(word)
         tokens.append((titlearr,reviewarr))
 
 
 #stemming
-def snowballStemming():
+def porterstemming():
     corpus=[]
-    ss = SnowballStemmer(language='english')
+    ss = PorterStemmer()
 
     for i in range(0,len(tokens)):
         stemtitle=[]
@@ -60,9 +56,9 @@ def snowballStemming():
             stemreview.append(ss.stem(word))
         corpus.append((' '.join(stemtitle),' '.join(stemreview)))
 
-def porterstemming():
+def snowballStemming():
     corpus=[]
-    ss = PorterStemmer(language='english')
+    ss = SnowballStemmer(language='english')
 
     for i in range(0,len(tokens)):
         stemtitle=[]
@@ -92,7 +88,7 @@ def vectorize():
     vect = TfidfVectorizer(min_df=2, max_df=0.5, ngram_range=(1,2))#see if it is too much
     features = vect.fit_transform([tup[0]+tup[1] for tup in corpus]).toarray()
     #features_review = vect.fit_transform([tup[1] for tup in corpus])
-    #pd.DataFrame(features_review.todense(),columns=vect.get_feature_names())
+    pd.DataFrame(features.todense(),columns=vect.get_feature_names())
 
 
 #create model
@@ -135,4 +131,15 @@ def evaluatePerformance(y_test, y_pred):
     print('Precision: ', precision_score(y_test, y_pred))
     print('Recall: ', recall_score(y_test, y_pred))
     print('F1: ', f1_score(y_test, y_pred))
+
+train = pd.read_csv("./resources/train.csv")
+#test = pd.read_csv("./resources/test.csv")
+tokens=[]
+corpus=[]
+pre_process()
+#porterstemming()
+#snowballStemming()
+lemmatizing()
+vectorize()
+
 
