@@ -3,13 +3,8 @@ import re
 
 import algorithms
 
-# import nltk
-# nltk.download('stopwords')
-
 from nltk.corpus import stopwords
-from nltk.stem.snowball import SnowballStemmer
 from nltk.stem.porter import PorterStemmer
-from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
 
 from sklearn.metrics import confusion_matrix
@@ -20,6 +15,8 @@ from sklearn.metrics import f1_score
 
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
 
 #cleaning and tokenizing 
 def pre_process(train):
@@ -86,19 +83,12 @@ tokens= pre_process(train)
 corpus = porterStemming(tokens)
 #wordCloud(corpus)
 
-# #snowballStemming()
-# lemmatizing()
-
 X = vectorize(corpus)
 y = train['class_index']
 
-print(X.shape, y.shape)
-
-
-from sklearn.model_selection import train_test_split
+# print(X.shape, y.shape)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20)
-
 
 print(X_train.shape, y_train.shape)
 print(X_test.shape, y_test.shape)
@@ -109,52 +99,56 @@ print(y_train.value_counts())
 print("\nLabel distribution in the test set:")
 print(y_test.value_counts())
 
-## Naive Bayes
+# ## Naive Bayes
+# print("\n-------------------------")
+# print(" Multinomial Naive Bayes")
+# print("-------------------------")
+
+# y_pred = algorithms.naiveBayes(X_train, y_train, X_test)
+
+
+# ## Decision Tree
+# # better with train_big
+# print("\n-------------------------")
+# print("      Decision Tree")
+# print("-------------------------")
+
+# y_pred = algorithms.decisionTree(X_train, y_train, X_test)
+
+
+## SVM
 print("\n-------------------------")
-print(" Multinomial Naive Bayes")
+print("          SVM")
 print("-------------------------")
 
-y_pred = algorithms.naiveBayes(X_train, y_train, X_test)
-
-
-## Naive Bayes
-print("\n-------------------------")
-print(" Multinomial Naive Bayes")
-print("-------------------------")
-
-y_pred = algorithms.naiveBayes(X_train, y_train, X_test)
+y_pred = algorithms.SVM(X_train, y_train, X_test)
 
 print("  Performance:")
 evaluatePerformance(y_test, y_pred)
 
+# from sklearn.svm import SVC
+# from sklearn.model_selection import cross_val_score
+
+# clf = SVC()
+# scores = cross_val_score(clf, X, y, cv=10)
+
+# print(scores)
+# print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 
 
 
+# ## KNN
+# print("\n-------------------------")
+# print("          KNN")
+# print("-------------------------")
+
+# knn = algorithms.KNN_NLC_Classifier
+
+# knn.fit(knn, X_train, y_train)
+# y_pred = knn.predict(knn, X_test)
+
+# print("  Performance:")
+# evaluatePerformance(y_test, y_pred)
 
 
-# def snowballStemming():
-#     corpus=[]
-#     ss = SnowballStemmer(language='english')
 
-#     for i in range(0,len(tokens)):
-#         stemtitle=[]
-#         for word in tokens[i][0]:
-#             stemtitle.append(ss.stem(word))
-#         stemreview=[]
-#         for word in tokens[i][1]:
-#             stemreview.append(ss.stem(word))
-#         corpus.append((' '.join(stemtitle),' '.join(stemreview)))
-
-# #lemmatizing
-# def lemmatizing():
-#     corpus=[]
-#     wnl = WordNetLemmatizer()
-
-#     for i in range(0,len(tokens)):
-#         stemtitle=[]
-#         for word in tokens[i][0]:
-#             stemtitle.append(wnl.lemmatize(word))
-#         stemreview=[]
-#         for word in tokens[i][1]:
-#             stemreview.append(wnl.lemmatize(word))
-#         corpus.append((' '.join(stemtitle),' '.join(stemreview)))
