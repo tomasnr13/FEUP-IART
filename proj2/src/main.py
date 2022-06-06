@@ -76,79 +76,87 @@ def evaluatePerformance(y_test, y_pred):
     print('Recall: ', recall_score(y_test, y_pred, average='macro'))
     print('F1: ', f1_score(y_test, y_pred, average='macro'))
 
-train = pd.read_csv("./resources/train.csv")
-test = pd.read_csv("./resources/test.csv")
+if __name__ == "__main__":
+    print("Choose the model to apply:")
+    print(" 1. Naive Bayes (Multinomial)")
+    print(" 2. Decision Tree")
+    print(" 3. SVM")
 
-tokens= pre_process(train)
-corpus = porterStemming(tokens)
-#wordCloud(corpus)
+    algorithm = int(input("Algorithm number: "))
 
-X = vectorize(corpus)
-y = train['class_index']
+    train = pd.read_csv("./resources/train.csv")
+    test = pd.read_csv("./resources/test.csv")
 
-# print(X.shape, y.shape)
+    tokens= pre_process(train)
+    corpus = porterStemming(tokens)
+    #wordCloud(corpus)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20)
+    X = vectorize(corpus)
+    y = train['class_index']
 
-print(X_train.shape, y_train.shape)
-print(X_test.shape, y_test.shape)
+    # print(X.shape, y.shape)
 
-print("\nLabel distribution in the training set:")
-print(y_train.value_counts())
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20)
 
-print("\nLabel distribution in the test set:")
-print(y_test.value_counts())
+    print(X_train.shape, y_train.shape)
+    print(X_test.shape, y_test.shape)
 
-# ## Naive Bayes
-# print("\n-------------------------")
-# print(" Multinomial Naive Bayes")
-# print("-------------------------")
+    print("\nLabel distribution in the training set:")
+    print(y_train.value_counts())
 
-# y_pred = algorithms.naiveBayes(X_train, y_train, X_test)
+    print("\nLabel distribution in the test set:")
+    print(y_test.value_counts())
+
+    if(algorithm == 1):
+        ## Naive Bayes
+        print("\n-------------------------")
+        print(" Multinomial Naive Bayes")
+        print("-------------------------")
+
+        y_pred = algorithms.naiveBayes(X_train, y_train, X_test)
+    
+        print("  Performance:")
+        evaluatePerformance(y_test, y_pred)
+    elif algorithm==2:
+        ## Decision Tree
+        # better with train_big
+        print("\n-------------------------")
+        print("      Decision Tree")
+        print("-------------------------")
+
+        y_pred = algorithms.decisionTree(X_train, y_train, X_test)
+
+        print("  Performance:")
+        evaluatePerformance(y_test, y_pred)
+    elif algorithm==3:
+        ## SVM
+        print("\n-------------------------")
+        print("          SVM")
+        print("-------------------------")
+
+        y_pred = algorithms.SVM(X_train, y_train, X_test)
+
+        print("  Performance:")
+        evaluatePerformance(y_test, y_pred)
+
+        # from sklearn.svm import SVC
+        # from sklearn.model_selection import cross_val_score
+
+        # clf = SVC()
+        # scores = cross_val_score(clf, X, y, cv=10)
+
+        # print(scores)
+        # print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 
 
-# ## Decision Tree
-# # better with train_big
-# print("\n-------------------------")
-# print("      Decision Tree")
-# print("-------------------------")
 
-# y_pred = algorithms.decisionTree(X_train, y_train, X_test)
+    ## KNN
+    print("\n-------------------------")
+    print("          KNN")
+    print("-------------------------")
 
+    knn = algorithms.knn(X_train, y_train)
 
-## SVM
-print("\n-------------------------")
-print("          SVM")
-print("-------------------------")
-
-y_pred = algorithms.SVM(X_train, y_train, X_test)
-
-print("  Performance:")
-evaluatePerformance(y_test, y_pred)
-
-# from sklearn.svm import SVC
-# from sklearn.model_selection import cross_val_score
-
-# clf = SVC()
-# scores = cross_val_score(clf, X, y, cv=10)
-
-# print(scores)
-# print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
-
-
-
-# ## KNN
-# print("\n-------------------------")
-# print("          KNN")
-# print("-------------------------")
-
-# knn = algorithms.KNN_NLC_Classifier
-
-# knn.fit(knn, X_train, y_train)
-# y_pred = knn.predict(knn, X_test)
-
-# print("  Performance:")
-# evaluatePerformance(y_test, y_pred)
 
 
 

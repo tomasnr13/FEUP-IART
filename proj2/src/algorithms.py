@@ -29,7 +29,7 @@ def SVM(X_train, y_train, X_test):
 
     return y_pred
 
-def knn(X_train, y_train, X_test):
+def knn(X_train, y_train):
     classifier = NearestNeighbors()
     classifier.fit(X_train, y_train)
 
@@ -38,6 +38,3 @@ def knn(X_train, y_train, X_test):
     print("distances:", distances)
     print("indices:", indices)
 
-    #y_pred = classifier.predict(X_test)
-
-    #return y_pred
