@@ -140,6 +140,6 @@ pre_process()
 #porterstemming()
 #snowballStemming()
 lemmatizing()
-vectorize()
+#vectorize()
 
 
