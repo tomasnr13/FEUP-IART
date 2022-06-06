@@ -1,7 +1,5 @@
 #Tensorflow and Keras and sklearn
 import tensorflow as tf
-import pandas as pd
-import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Dropout
@@ -9,29 +7,11 @@ from tensorflow.keras.layers import Flatten
 from tensorflow.keras.layers import Conv1D
 from tensorflow.keras.layers import MaxPooling1D
 from tensorflow.keras.layers import Embedding
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing import sequence
-from sklearn.preprocessing import LabelEncoder
 
-#Charts
-from sklearn import metrics 
-from sklearn.metrics import f1_score, accuracy_score,confusion_matrix,classification_report
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# Time
-import time
-import datetime
 
 #Performance Plot
-import contractions
-from bs4 import BeautifulSoup
-import numpy as np
-
 import process_data
 import performance
-
-
 
 # Setting Vocabulary size and Emmbedding size
 
